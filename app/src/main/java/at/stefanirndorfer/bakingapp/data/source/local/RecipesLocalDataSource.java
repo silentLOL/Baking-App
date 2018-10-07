@@ -2,7 +2,9 @@ package at.stefanirndorfer.bakingapp.data.source.local;
 
 import android.support.annotation.NonNull;
 
+import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
+import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.data.source.RecipesDataSource;
 import at.stefanirndorfer.bakingapp.util.AppExecutors;
 
@@ -62,31 +64,6 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void completeRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void completeRecipe(@NonNull String recipeId) {
-
-    }
-
-    @Override
-    public void activateRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void activateRecipe(@NonNull String recipeId) {
-
-    }
-
-    @Override
-    public void clearCompletedRecipes() {
-
-    }
-
-    @Override
     public void refreshRecipes() {
 
     }
@@ -98,6 +75,46 @@ public class RecipesLocalDataSource implements RecipesDataSource {
 
     @Override
     public void deleteRecipe(@NonNull String recipeId) {
+
+    }
+
+    @Override
+    public void getStepsForRecipe(@NonNull String recipeId, @NonNull LoadStepsCallback callback) {
+
+    }
+
+    @Override
+    public void deleteAllSteps() {
+
+    }
+
+    @Override
+    public void deleteStepsForRecipe(int recipeId) {
+
+    }
+
+    @Override
+    public void saveStep(Step step) {
+
+    }
+
+    @Override
+    public void getIngredientsForRecipe(@NonNull String recipeId, @NonNull LoadIngredientsCallback callback) {
+
+    }
+
+    @Override
+    public void deleteAllIngredients() {
+
+    }
+
+    @Override
+    public void deleteIngredientsForRecipe(int recipeId) {
+
+    }
+
+    @Override
+    public void saveIngredient(Ingredient ingredient) {
 
     }
 }
