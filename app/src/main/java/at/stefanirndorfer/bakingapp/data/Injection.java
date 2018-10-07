@@ -23,6 +23,6 @@ public class Injection {
         RecipesDatabase database = RecipesDatabase.getInstance(context);
         return RecipesRepository.getInstance(FakeRecipesRemoteDataSource.getInstance(),
                 RecipesLocalDataSource.getInstance(new AppExecutors(),
-                        database.recipesDao()));
+                        database.recipesDao(), database.stepsDao(), database.ingredientsDao()));
     }
 }

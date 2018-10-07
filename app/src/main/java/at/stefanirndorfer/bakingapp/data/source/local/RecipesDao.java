@@ -13,10 +13,10 @@ import at.stefanirndorfer.bakingapp.data.Recipe;
 @Dao
 public interface RecipesDao {
 
-    @Query("SELECT * FROM Recipes")
+    @Query("SELECT * FROM recipe")
     LiveData<List<Recipe>> getRecipes();
 
-    @Query("DELETE * FROM Recipes")
+    @Query("DELETE FROM recipe")
     void deleteAllRecipes();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

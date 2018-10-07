@@ -1,31 +1,92 @@
 package at.stefanirndorfer.bakingapp.data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Recipe implements Parcelable {
+import java.util.List;
 
+@Entity(tableName = "recipe")
+public class Recipe {
 
-    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
-        @Override
-        public Recipe createFromParcel(Parcel in) {
-            return new Recipe(in);
-        }
+    @PrimaryKey
+    @SerializedName("id")
+    @ColumnInfo(name = "recipe_id")
+    private Integer id;
 
-        @Override
-        public Recipe[] newArray(int size) {
-            return new Recipe[size];
-        }
-    };
+    @SerializedName("name")
+    private String name;
 
-    @Override
-    public int describeContents() {
-        return 0;
+    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the best way */
+    @SerializedName("ingredients")
+    private List<Ingredient> ingredients;
+
+    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the best way */
+    @SerializedName("steps")
+    private List<Step> steps;
+
+    @SerializedName("servings")
+    private Integer servings;
+
+    public Recipe(Integer id, String name, List<Ingredient> ingredients, List<Step> steps, Integer servings) {
+        this.id = id;
+        this.name = name;
+        this.ingredients = ingredients;
+        this.steps = steps;
+        this.servings = servings;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public Recipe(Integer id, String name, Integer servings) {
+        this.id = id;
+        this.name = name;
+        this.ingredients = null;
+        this.steps = null;
+        this.servings = servings;
     }
+
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<Step> getSteps() {
+        return steps;
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.steps = steps;
+    }
+
+    public Integer getServings() {
+        return servings;
+    }
+
+    public void setServings(Integer servings) {
+        this.servings = servings;
+    }
+
+
 }

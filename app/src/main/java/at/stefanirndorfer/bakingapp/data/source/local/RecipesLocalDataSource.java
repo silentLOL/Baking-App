@@ -15,22 +15,30 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     private static volatile RecipesLocalDataSource INSTANCE;
 
     private RecipesDao mRecipesDao;
+    private StepsDao mStepsDao;
+    private IngredientsDao mIngredientsDao;
 
     private AppExecutors mAppExecutors;
 
     // Prevent direct instantiation.
     private RecipesLocalDataSource(@NonNull AppExecutors appExecutors,
-                                   @NonNull RecipesDao recipesDao) {
+                                   @NonNull RecipesDao recipesDao,
+                                   @NonNull StepsDao stepsDao,
+                                   @NonNull IngredientsDao ingredientsDao) {
         mAppExecutors = appExecutors;
         mRecipesDao = recipesDao;
+        mStepsDao = stepsDao;
+        mIngredientsDao = ingredientsDao;
     }
 
     public static RecipesLocalDataSource getInstance(@NonNull AppExecutors appExecutors,
-                                                     @NonNull RecipesDao recipesDao) {
+                                                     @NonNull RecipesDao recipesDao,
+                                                     @NonNull StepsDao stepsDao,
+                                                     @NonNull IngredientsDao ingredientsDao) {
         if (INSTANCE == null) {
             synchronized (RecipesLocalDataSource.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new RecipesLocalDataSource(appExecutors, recipesDao);
+                    INSTANCE = new RecipesLocalDataSource(appExecutors, recipesDao, stepsDao, ingredientsDao);
                 }
             }
         }
