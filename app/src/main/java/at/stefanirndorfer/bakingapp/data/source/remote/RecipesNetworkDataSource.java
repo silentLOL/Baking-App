@@ -1,35 +1,74 @@
 package at.stefanirndorfer.bakingapp.data.source.remote;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import java.util.Collections;
+import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.data.source.RecipesDataSource;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
- * This is gonna be our Retrofit client
+ * This is where we use our Retrofit client
  */
 public class RecipesNetworkDataSource implements RecipesDataSource {
+    private static final String TAG = RecipesNetworkDataSource.class.getCanonicalName();
+
+    private static RecipesNetworkDataSource instance;
+
+    private RecipesNetworkDataSource() {
+    }
+
+    public static RecipesNetworkDataSource getInstance() {
+        if (instance == null) {
+            instance = new RecipesNetworkDataSource();
+        }
+        return instance;
+    }
 
 
     @Override
-    public void getRecipes(@NonNull LoadRecipesCallback callback) {
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        final MutableLiveData<List<Recipe>> returningData = new MutableLiveData<>();
 
+        RequestRecipesService service = RetrofitClient.getRetrofitInstance().create(RequestRecipesService.class);
+        Call<List<Recipe>> call = service.getRecipes();
+        Log.d(TAG, call.request().toString());
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                Log.d(TAG, "Received response");
+                if (response.body() != null) {
+                    List<Recipe> result = response.body();
+                    if (!result.isEmpty()) {
+                        returningData.setValue(result);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                Log.e(TAG, "Error calling for recipes: " + t.getMessage());
+                returningData.setValue(Collections.emptyList());
+            }
+        });
+        return returningData;
     }
 
     @Override
-    public void getRecipe(@NonNull String recipeId, @NonNull GetRecipeCallback callback) {
-
+    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+        return null;
     }
 
     @Override
     public void saveRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void refreshRecipes() {
 
     }
 
@@ -44,8 +83,8 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getStepsForRecipe(@NonNull String recipeId, @NonNull LoadStepsCallback callback) {
-
+    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override
@@ -64,8 +103,8 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getIngredientsForRecipe(@NonNull String recipeId, @NonNull LoadIngredientsCallback callback) {
-
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override

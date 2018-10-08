@@ -1,6 +1,5 @@
 package at.stefanirndorfer.bakingapp.data.source.local;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -14,10 +13,10 @@ import at.stefanirndorfer.bakingapp.data.Step;
 public interface StepsDao {
 
     @Query("SELECT * FROM step")
-    LiveData<List<Step>> getSteps();
+    List<Step> getSteps();
 
     @Query("SELECT * FROM step WHERE recipe_id=:recipeId")
-    LiveData<List<Step>> getStepsForRecipe(final int recipeId);
+    List<Step> getStepsForRecipe(final int recipeId);
 
     @Query("DELETE FROM step")
     void deleteAllStep();

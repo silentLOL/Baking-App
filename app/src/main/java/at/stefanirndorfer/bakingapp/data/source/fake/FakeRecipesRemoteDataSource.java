@@ -1,8 +1,10 @@
 package at.stefanirndorfer.bakingapp.data.source.fake;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
@@ -26,24 +28,18 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
         return INSTANCE;
     }
 
-
     @Override
-    public void getRecipes(@NonNull LoadRecipesCallback callback) {
-
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        return null;
     }
 
     @Override
-    public void getRecipe(@NonNull String recipeId, @NonNull GetRecipeCallback callback) {
-
+    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+        return null;
     }
 
     @Override
     public void saveRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void refreshRecipes() {
 
     }
 
@@ -58,8 +54,8 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getStepsForRecipe(@NonNull String recipeId, @NonNull LoadStepsCallback callback) {
-
+    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override
@@ -78,8 +74,8 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getIngredientsForRecipe(@NonNull String recipeId, @NonNull LoadIngredientsCallback callback) {
-
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override

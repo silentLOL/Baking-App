@@ -1,10 +1,15 @@
 package at.stefanirndorfer.bakingapp.data.source;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import java.util.List;
 import java.util.Map;
 
+import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
+import at.stefanirndorfer.bakingapp.data.Step;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -16,31 +21,35 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * obtained from the server, by using the remote data source only if the local database doesn't
  * exist or is empty.
  * <p>
- * //TODO: Implement this class using LiveData.
  */
 public class RecipesRepository implements RecipesDataSource {
 
 
+    private static final String TAG = RecipesRepository.class.getCanonicalName();
     private volatile static RecipesRepository INSTANCE = null;
-    private final RecipesDataSource mRecipesRemoteDataSourec;
-    private final RecipesDataSource mRecipesLocalDataSourec;
+    private final RecipesDataSource mRecipesRemoteDataSource;
+    private final RecipesDataSource mRecipesLocalDataSource;
 
     /**
      * This variable has package local visibility so it can be accessed from tests.
      */
-    Map<String, Recipe> mCachedRecipes;
+    List<Recipe> mCachedRecipes;
+    Map<String, Step> mCachedSteps;
+    Map<String, Ingredient> mCachedIngredients;
 
     /**
      * Marks the cache as invalid, to force an update the next time data is requested. This variable
      * has package local visibility so it can be accessed from tests.
      */
-    private boolean mCacheIsDirty = false;
+    private boolean mRecipesCacheIsDirty = false;
+    private boolean mStepsCacheIsDirty = false;
+    private boolean mIngredientsCacheIsDirty = false;
 
     // Prevent direct instantiation.
     private RecipesRepository(@NonNull RecipesDataSource recipesRemoteDataSource,
                               @NonNull RecipesDataSource recipesLocalDataSource) {
-        mRecipesRemoteDataSourec = checkNotNull(recipesRemoteDataSource);
-        mRecipesLocalDataSourec = checkNotNull(recipesLocalDataSource);
+        mRecipesRemoteDataSource = checkNotNull(recipesRemoteDataSource);
+        mRecipesLocalDataSource = checkNotNull(recipesLocalDataSource);
     }
 
     /**
@@ -72,47 +81,89 @@ public class RecipesRepository implements RecipesDataSource {
 
 
     @Override
-    public void getRecipes(@NonNull LoadRecipesCallback callback) {
-
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        final MutableLiveData<List<Recipe>> returningData = new MutableLiveData<>();
+        if (mCachedRecipes != null && !mRecipesCacheIsDirty) {
+            returningData.setValue(mCachedRecipes);
+        }
+        if (!mRecipesCacheIsDirty) {
+            // lets ask the local source first ...
+            mRecipesLocalDataSource.getRecipes().observeForever(recipes -> {
+                if (recipes != null && !recipes.isEmpty()) {
+                    returningData.setValue(recipes);
+                }
+            });
+            if (returningData.getValue() == null || returningData.getValue().isEmpty()) {
+                // so it's a network call
+                return getRecipesFromRemoteDataSource();
+            }
+        } else {
+            // the local data need a refresh on the next request
+            return getRecipesFromRemoteDataSource();
+        }
+        mCachedRecipes = returningData.getValue();
+        mRecipesCacheIsDirty = false;
+        return returningData;
     }
 
-    @Override
-    public void getRecipe(@NonNull String recipeId, @NonNull GetRecipeCallback callback) {
+    /**
+     * fetches the full list of recipes including their nested Step and Ingredients from the network
+     * and writes them into the db
+     *
+     * @return
+     */
+    private MutableLiveData<List<Recipe>> getRecipesFromRemoteDataSource() {
+        final MutableLiveData<List<Recipe>> returningData = new MutableLiveData<>();
+        mRecipesRemoteDataSource.getRecipes().observeForever(recipes -> {
+            if (recipes != null && !recipes.isEmpty()) {
+                mCachedRecipes = recipes;
+                processData(recipes);
+                returningData.setValue(recipes);
+            }
+        });
+        return null;
+    }
 
+    /**
+     * caches and stores all the values
+     *
+     * @param recipes received from the network call
+     *                the object is supposed to be fully blown and contains all steps and ingredients
+     */
+    private void processData(List<Recipe> recipes) {
+        //TODO: Caching --> check if even needed
+        Log.d(TAG, "Storing all data retrieved from the network source");
+        writeNetworkResponseToDataBases(recipes);
+    }
+
+    /**
+     * iterates over all the recipes and adds the recipeId value to the Ingredients and Steps
+     * they will be the ForeignKeys in the DB and finally stores the data
+     *
+     * @param recipes
+     */
+    private void writeNetworkResponseToDataBases(List<Recipe> recipes) {
+        for (Recipe currRecipe : recipes) {
+            mRecipesLocalDataSource.saveRecipe(currRecipe);
+            for (Step currStep : currRecipe.getSteps()) {
+                currStep.setRecipeId(currRecipe.getId());
+                mRecipesLocalDataSource.saveStep(currStep);
+            }
+            for (Ingredient currIngredient : currRecipe.getIngredients()) {
+                currIngredient.setRecipeId(currRecipe.getId());
+                mRecipesLocalDataSource.saveIngredient(currIngredient);
+            }
+        }
+    }
+
+
+    @Override
+    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+        return null;
     }
 
     @Override
     public void saveRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void completeRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void completeRecipe(@NonNull String recipeId) {
-
-    }
-
-    @Override
-    public void activateRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void activateRecipe(@NonNull String recipeId) {
-
-    }
-
-    @Override
-    public void clearCompletedRecipes() {
-
-    }
-
-    @Override
-    public void refreshRecipes() {
 
     }
 
@@ -123,6 +174,46 @@ public class RecipesRepository implements RecipesDataSource {
 
     @Override
     public void deleteRecipe(@NonNull String recipeId) {
+
+    }
+
+    @Override
+    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
+        return null;
+    }
+
+    @Override
+    public void deleteAllSteps() {
+
+    }
+
+    @Override
+    public void deleteStepsForRecipe(int recipeId) {
+
+    }
+
+    @Override
+    public void saveStep(Step step) {
+
+    }
+
+    @Override
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
+        return null;
+    }
+
+    @Override
+    public void deleteAllIngredients() {
+
+    }
+
+    @Override
+    public void deleteIngredientsForRecipe(int recipeId) {
+
+    }
+
+    @Override
+    public void saveIngredient(Ingredient ingredient) {
 
     }
 }

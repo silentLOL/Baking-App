@@ -1,6 +1,9 @@
 package at.stefanirndorfer.bakingapp.data.source.local;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+
+import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
@@ -47,30 +50,32 @@ public class RecipesLocalDataSource implements RecipesDataSource {
         return INSTANCE;
     }
 
-
     @Override
-    public void getRecipes(@NonNull LoadRecipesCallback callback) {
-
+    public MutableLiveData<List<Recipe>> getRecipes() {
+        MutableLiveData<List<Recipe>> returningValue = new MutableLiveData<>();
+        Runnable runnable = () -> returningValue.setValue(mRecipesDao.getRecipes());
+        mAppExecutors.diskIO().execute(runnable);
+        return returningValue;
     }
 
     @Override
-    public void getRecipe(@NonNull String recipeId, @NonNull GetRecipeCallback callback) {
-
+    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+        MutableLiveData<Recipe> returningValue = new MutableLiveData<>();
+        Runnable runnable = () -> returningValue.setValue(mRecipesDao.getRecipesById(recipeId));
+        mAppExecutors.diskIO().execute(runnable);
+        return returningValue;
     }
 
     @Override
     public void saveRecipe(@NonNull Recipe recipe) {
-
-    }
-
-    @Override
-    public void refreshRecipes() {
-
+        Runnable runnable = () -> mRecipesDao.insertRecipe(recipe);
+        mAppExecutors.diskIO().execute(runnable);
     }
 
     @Override
     public void deleteAllRecipes() {
-
+        Runnable runnable = () -> mRecipesDao.deleteAllRecipes();
+        mAppExecutors.diskIO().execute(runnable);
     }
 
     @Override
@@ -79,8 +84,8 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getStepsForRecipe(@NonNull String recipeId, @NonNull LoadStepsCallback callback) {
-
+    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override
@@ -99,8 +104,8 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void getIngredientsForRecipe(@NonNull String recipeId, @NonNull LoadIngredientsCallback callback) {
-
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
+        return null;
     }
 
     @Override

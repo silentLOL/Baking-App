@@ -19,10 +19,10 @@ public class Ingredient {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "ingredient_id")
-    private final Integer ingredientId;
+    private Integer ingredientId;
 
     @ColumnInfo(name = "recipe_id")
-    private final Integer recipeId;
+    private Integer recipeId;
 
     @SerializedName("quantity")
     private Integer quantity;
@@ -82,5 +82,13 @@ public class Ingredient {
 
     public Integer getRecipeId() {
         return recipeId;
+    }
+
+    public void setIngredientId(Integer ingredientId) {
+        this.ingredientId = ingredientId;
+    }
+
+    public void setRecipeId(Integer recipeId) {
+        this.recipeId = recipeId;
     }
 }

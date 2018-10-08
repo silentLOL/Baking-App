@@ -18,7 +18,7 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 public class Step {
 
     @ColumnInfo(name = "recipe_id")
-    private final Integer recipeId;
+    private Integer recipeId;
 
 
     @SerializedName("id")
@@ -103,5 +103,9 @@ public class Step {
 
     public Integer getRecipeId() {
         return recipeId;
+    }
+
+    public void setRecipeId(Integer recipeId) {
+        this.recipeId = recipeId;
     }
 }

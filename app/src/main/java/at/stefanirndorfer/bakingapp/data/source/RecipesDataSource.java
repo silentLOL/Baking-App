@@ -1,5 +1,6 @@
 package at.stefanirndorfer.bakingapp.data.source;
 
+import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -13,46 +14,15 @@ import at.stefanirndorfer.bakingapp.data.Step;
  */
 public interface RecipesDataSource {
 
-    interface LoadRecipesCallback {
-
-        void onRecipesLoaded(List<Recipe> recipes);
-
-        void onDataNotAvailable();
-    }
-
-    interface GetRecipeCallback {
-
-        void onRecipeLoaded(Recipe recipe);
-
-        void onDataNotAvailable();
-    }
-
-    interface LoadStepsCallback {
-
-        void onStepsLoaded(List<Step> steps);
-
-        void onDataNotAvailable();
-    }
-
-
-    interface LoadIngredientsCallback {
-
-        void onIngredientsLoaded(List<Ingredient> ingredients);
-
-        void onDataNotAvailable();
-    }
-
 
     //--------------------------------
     // Recipes
     //--------------------------------
-    void getRecipes(@NonNull LoadRecipesCallback callback);
+    MutableLiveData<List<Recipe>> getRecipes();
 
-    void getRecipe(@NonNull String recipeId, @NonNull GetRecipeCallback callback);
+    MutableLiveData<Recipe> getRecipe(@NonNull int recipeId);
 
     void saveRecipe(@NonNull Recipe recipe);
-
-    void refreshRecipes();
 
     void deleteAllRecipes();
 
@@ -62,7 +32,7 @@ public interface RecipesDataSource {
     // Steps
     //--------------------------------
 
-    void getStepsForRecipe(@NonNull String recipeId, @NonNull LoadStepsCallback callback);
+    MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId);
 
     void deleteAllSteps();
 
@@ -74,7 +44,7 @@ public interface RecipesDataSource {
     // Ingredients
     //--------------------------------
 
-    void getIngredientsForRecipe(@NonNull String recipeId, @NonNull LoadIngredientsCallback callback);
+    MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId);
 
     void deleteAllIngredients();
 

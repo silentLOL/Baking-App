@@ -1,6 +1,5 @@
 package at.stefanirndorfer.bakingapp.data.source.local;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -14,10 +13,10 @@ import at.stefanirndorfer.bakingapp.data.Ingredient;
 public interface IngredientsDao {
 
     @Query("SELECT * FROM ingredient")
-    LiveData<List<Ingredient>> getIngredients();
+    List<Ingredient> getIngredients();
 
     @Query("SELECT * FROM ingredient WHERE recipe_id=:recipeId")
-    LiveData<List<Ingredient>> getIngredientsForRecipe(final int recipeId);
+    List<Ingredient> getIngredientsForRecipe(final int recipeId);
 
     @Query("DELETE FROM ingredient")
     void deleteAllIngredients();
