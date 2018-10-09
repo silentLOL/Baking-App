@@ -45,6 +45,7 @@ ext {
     retrofitVersion = '2.3.0'
     gsonVersion = '2.3.0'
     guavaVersion = '26.0-android'
+    timberVersion = '4.7.1'
 
     // Architecture Components dependencies
     roomVersion = "1.1.1"

@@ -2,7 +2,6 @@ package at.stefanirndorfer.bakingapp.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.Map;
 import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.Step;
+import timber.log.Timber;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -132,7 +132,7 @@ public class RecipesRepository implements RecipesDataSource {
      */
     private void processData(List<Recipe> recipes) {
         //TODO: Caching --> check if even needed
-        Log.d(TAG, "Storing all data retrieved from the network source");
+        Timber.d("Storing all data retrieved from the network source");
         writeNetworkResponseToDataBases(recipes);
     }
 

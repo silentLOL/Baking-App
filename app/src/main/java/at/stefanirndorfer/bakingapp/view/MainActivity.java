@@ -15,10 +15,10 @@ import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.util.ActivityUtils;
 import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = MainActivity.class.getName();
     private MainViewModel mViewModel;
 
     @Override
@@ -39,13 +39,14 @@ public class MainActivity extends AppCompatActivity {
     private void subscribeOnRecipes() {
         final Observer<List<Recipe>> recipesObserver = recipes -> {
           if (recipes != null && !recipes.isEmpty()){
-              StringBuilder sb = new StringBuilder();
+              StringBuilder sb = new StringBuilder("Received the following recipies via live data: \n");
               for (Recipe currElement : recipes) {
                   sb.append(currElement.toString());
                   sb.append("\n");
               }
+              Timber.d(sb.toString());
           } else {
-              Log.d(TAG, "No recipes received from view model");
+              Timber.d("No recipes received from view model");
           }
         };
         mViewModel.getRecipesLiveData().observe(this,recipesObserver);

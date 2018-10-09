@@ -25,5 +25,5 @@ public interface StepsDao {
     void deleteStepsForRecipe(final int recipeId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void instertStep(Step step);
+    void insertStep(Step step);
 }

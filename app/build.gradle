@@ -32,6 +32,9 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
 
+    // timber
+    implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
 

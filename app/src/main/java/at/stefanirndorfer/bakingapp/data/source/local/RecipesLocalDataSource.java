@@ -4,13 +4,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.data.source.RecipesDataSource;
 import at.stefanirndorfer.bakingapp.util.AppExecutors;
+import timber.log.Timber;
 
 
 /**
@@ -69,13 +69,19 @@ public class RecipesLocalDataSource implements RecipesDataSource {
 
     @Override
     public void saveRecipe(@NonNull Recipe recipe) {
-        Runnable runnable = () -> mRecipesDao.insertRecipe(recipe);
+        Runnable runnable = () -> {
+            Timber.d("inserting recipe: " + recipe.getName() + " into db.");
+            mRecipesDao.insertRecipe(recipe);
+        };
         mAppExecutors.diskIO().execute(runnable);
     }
 
     @Override
     public void deleteAllRecipes() {
-        Runnable runnable = () -> mRecipesDao.deleteAllRecipes();
+        Runnable runnable = () -> {
+            Timber.d("Deleting all recipes from DB.");
+            mRecipesDao.deleteAllRecipes();
+        };
         mAppExecutors.diskIO().execute(runnable);
     }
 
@@ -101,7 +107,11 @@ public class RecipesLocalDataSource implements RecipesDataSource {
 
     @Override
     public void saveStep(Step step) {
-
+        Runnable runnable = () -> {
+            Timber.d("inserting step: " + step.getShortDescription() + " into db.");
+            mStepsDao.insertStep(step);
+        };
+        mAppExecutors.diskIO().execute(runnable);
     }
 
     @Override
@@ -121,6 +131,10 @@ public class RecipesLocalDataSource implements RecipesDataSource {
 
     @Override
     public void saveIngredient(Ingredient ingredient) {
-
+        Runnable runnable = () -> {
+            Timber.d("inserting ingredient: " + ingredient.getIngredientName() + " into db.");
+            mIngredientsDao.insertIngredient(ingredient);
+        };
+        mAppExecutors.diskIO().execute(runnable);
     }
 }

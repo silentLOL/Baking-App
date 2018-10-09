@@ -14,6 +14,7 @@ import at.stefanirndorfer.bakingapp.data.source.RecipesDataSource;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import timber.log.Timber;
 
 /**
  * This is where we use our Retrofit client
@@ -40,11 +41,11 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
 
         RequestRecipesService service = RetrofitClient.getRetrofitInstance().create(RequestRecipesService.class);
         Call<List<Recipe>> call = service.getRecipes();
-        Log.d(TAG, call.request().toString());
+        Timber.d( call.request().toString());
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                Log.d(TAG, "Received response");
+                Timber.d( "Received response");
                 if (response.body() != null) {
                     List<Recipe> result = response.body();
                     if (!result.isEmpty()) {
