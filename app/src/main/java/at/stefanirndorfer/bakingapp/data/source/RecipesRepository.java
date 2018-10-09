@@ -95,7 +95,7 @@ public class RecipesRepository implements RecipesDataSource {
                 if (recipes != null && !recipes.isEmpty()) {
                     mCachedRecipes = recipes;
                     mRecipesCacheIsDirty = false;
-                    mRecipiesLiveData.setValue(recipes);
+                    mRecipiesLiveData.postValue(recipes);
                 } else {
                     Timber.d("Empty or null result from database received.");
                     getRecipesFromRemoteDataSource();

@@ -3,11 +3,13 @@ package at.stefanirndorfer.bakingapp.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class MainViewModel extends AndroidViewModel {
         if (showLoadingUI) {
             dataLoading.set(true);
         }
-        mRecipesLiveData = mRecipeRepository.getRecipes();
+        mRecipeRepository.getRecipes().observeForever(recipes -> mRecipesLiveData.setValue(recipes));
     }
 
     public MutableLiveData<List<Recipe>> getRecipesLiveData() {
