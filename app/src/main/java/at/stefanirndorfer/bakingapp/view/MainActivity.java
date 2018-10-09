@@ -31,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.start();
     }
 
-
     private void doSubscriptions() {
         subscribeOnRecipes();
     }
 
     private void subscribeOnRecipes() {
+        Timber.d("Subscribing on Recipe data.");
         final Observer<List<Recipe>> recipesObserver = recipes -> {
           if (recipes != null && !recipes.isEmpty()){
               StringBuilder sb = new StringBuilder("Received the following recipies via live data: \n");

@@ -2,6 +2,7 @@ package at.stefanirndorfer.bakingapp.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,7 @@ public class RecipesRepository implements RecipesDataSource {
      * This variable has package local visibility so it can be accessed from tests.
      */
     List<Recipe> mCachedRecipes;
+    final MutableLiveData<List<Recipe>> mRecipiesLiveData = new MutableLiveData<>();
     Map<String, Step> mCachedSteps;
     Map<String, Ingredient> mCachedIngredients;
 
@@ -84,26 +86,26 @@ public class RecipesRepository implements RecipesDataSource {
     public MutableLiveData<List<Recipe>> getRecipes() {
         final MutableLiveData<List<Recipe>> returningData = new MutableLiveData<>();
         if (mCachedRecipes != null && !mRecipesCacheIsDirty) {
+            Timber.d("Recipe data are already cached.");
             returningData.setValue(mCachedRecipes);
         }
         if (!mRecipesCacheIsDirty) {
             // lets ask the local source first ...
             mRecipesLocalDataSource.getRecipes().observeForever(recipes -> {
                 if (recipes != null && !recipes.isEmpty()) {
-                    returningData.setValue(recipes);
+                    mCachedRecipes = recipes;
+                    mRecipesCacheIsDirty = false;
+                    mRecipiesLiveData.setValue(recipes);
+                } else {
+                    Timber.d("Empty or null result from database received.");
+                    getRecipesFromRemoteDataSource();
                 }
             });
-            if (returningData.getValue() == null || returningData.getValue().isEmpty()) {
-                // so it's a network call
-                return getRecipesFromRemoteDataSource();
-            }
         } else {
             // the local data need a refresh on the next request
-            return getRecipesFromRemoteDataSource();
+            getRecipesFromRemoteDataSource();
         }
-        mCachedRecipes = returningData.getValue();
-        mRecipesCacheIsDirty = false;
-        return returningData;
+        return mRecipiesLiveData;
     }
 
     /**
@@ -112,16 +114,14 @@ public class RecipesRepository implements RecipesDataSource {
      *
      * @return
      */
-    private MutableLiveData<List<Recipe>> getRecipesFromRemoteDataSource() {
-        final MutableLiveData<List<Recipe>> returningData = new MutableLiveData<>();
+    private void getRecipesFromRemoteDataSource() {
         mRecipesRemoteDataSource.getRecipes().observeForever(recipes -> {
             if (recipes != null && !recipes.isEmpty()) {
                 mCachedRecipes = recipes;
                 processData(recipes);
-                returningData.setValue(recipes);
+                mRecipiesLiveData.setValue(recipes);
             }
         });
-        return null;
     }
 
     /**

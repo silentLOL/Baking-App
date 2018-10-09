@@ -13,6 +13,7 @@ import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.source.RecipesRepository;
+import timber.log.Timber;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -34,6 +35,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void start() {
+        Timber.d("Requesting data from the data sources");
         loadRecipes(true);
     }
 
