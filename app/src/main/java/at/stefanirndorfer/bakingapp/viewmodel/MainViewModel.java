@@ -4,18 +4,25 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableBoolean;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Recipe;
-import at.stefanirndorfer.bakingapp.data.source.RecipesDataSource;
 import at.stefanirndorfer.bakingapp.data.source.RecipesRepository;
 
 public class MainViewModel extends AndroidViewModel {
 
+    // These observable fields will update Views automatically
+    public final ObservableList<Recipe> items = new ObservableArrayList<>();
+
+    public final ObservableBoolean dataLoading = new ObservableBoolean(false);
+
     private final Context mContext; // To avoid leaks, this must be an Application Context.
+
     private final RecipesRepository mRecipeRepository;
 
     private MutableLiveData<List<Recipe>> mRecipesLiveData = new MutableLiveData<>();
@@ -27,57 +34,20 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void start() {
-        loadRecipes();
+        loadRecipes(true);
     }
 
     /**
      * @param showLoadingUI Pass in true to display a loading icon in the UI
      */
-    private void loadRecipes( boolean showLoadingUI) {
+    private void loadRecipes(boolean showLoadingUI) {
         if (showLoadingUI) {
             dataLoading.set(true);
         }
         mRecipesLiveData = mRecipeRepository.getRecipes();
-        mRecipeRepository.getRecipes(new RecipesDataSource().LoadTasksCallback() {
-            @Override
-            public void onTasksLoaded (List < Task > tasks) {
-                List<Task> tasksToShow = new ArrayList<>();
+    }
 
-                // We filter the tasks based on the requestType
-                for (Task task : tasks) {
-                    switch (mCurrentFiltering) {
-                        case ALL_TASKS:
-                            tasksToShow.add(task);
-                            break;
-                        case ACTIVE_TASKS:
-                            if (task.isActive()) {
-                                tasksToShow.add(task);
-                            }
-                            break;
-                        case COMPLETED_TASKS:
-                            if (task.isCompleted()) {
-                                tasksToShow.add(task);
-                            }
-                            break;
-                        default:
-                            tasksToShow.add(task);
-                            break;
-                    }
-                }
-                if (showLoadingUI) {
-                    dataLoading.set(false);
-                }
-                mIsDataLoadingError.set(false);
-
-                items.clear();
-                items.addAll(tasksToShow);
-                empty.set(items.isEmpty());
-            }
-
-            @Override
-            public void onDataNotAvailable () {
-                mIsDataLoadingError.set(true);
-            }
-        });
+    public MutableLiveData<List<Recipe>> getRecipesLiveData() {
+        return mRecipesLiveData;
     }
 }

@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.Recipe;
@@ -53,7 +54,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     @Override
     public MutableLiveData<List<Recipe>> getRecipes() {
         MutableLiveData<List<Recipe>> returningValue = new MutableLiveData<>();
-        Runnable runnable = () -> returningValue.setValue(mRecipesDao.getRecipes());
+        Runnable runnable = () -> returningValue.postValue(mRecipesDao.getRecipes());
         mAppExecutors.diskIO().execute(runnable);
         return returningValue;
     }
@@ -61,7 +62,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     @Override
     public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
         MutableLiveData<Recipe> returningValue = new MutableLiveData<>();
-        Runnable runnable = () -> returningValue.setValue(mRecipesDao.getRecipesById(recipeId));
+        Runnable runnable = () -> returningValue.postValue(mRecipesDao.getRecipesById(recipeId));
         mAppExecutors.diskIO().execute(runnable);
         return returningValue;
     }

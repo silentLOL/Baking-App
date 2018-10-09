@@ -50,9 +50,9 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
     @Override
     public <T extends ViewModel> T create(Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(MainActivityViewModel.class)) {
+        if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
-            return (T) new MainActivityViewModel(mApplication, mRecipesRepository);
+            return (T) new MainViewModel(mApplication, mRecipesRepository);
         }
 //        } else if (modelClass.isAssignableFrom(TaskDetailViewModel.class)) {
 //            //noinspection unchecked

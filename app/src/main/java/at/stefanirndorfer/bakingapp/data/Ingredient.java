@@ -25,7 +25,7 @@ public class Ingredient {
     private Integer recipeId;
 
     @SerializedName("quantity")
-    private Integer quantity;
+    private Double quantity;
 
     //todo: find out how to make it an ENUM in first place
     @SerializedName("measure")
@@ -36,7 +36,7 @@ public class Ingredient {
     private String ingredientName;
 
     @Ignore
-    public Ingredient(Integer quantity, String measure, String ingredientName) {
+    public Ingredient(Double quantity, String measure, String ingredientName) {
         this.recipeId = null;
         this.ingredientId = null;
         this.quantity = quantity;
@@ -44,7 +44,7 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public Ingredient(Integer recipeId, Integer ingredientId, Integer quantity, String measure, String ingredientName) {
+    public Ingredient(Integer recipeId, Integer ingredientId, Double quantity, String measure, String ingredientName) {
         this.recipeId = recipeId;
         this.ingredientId = ingredientId;
         this.quantity = quantity;
@@ -52,11 +52,11 @@ public class Ingredient {
         this.ingredientName = ingredientName;
     }
 
-    public Integer getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
