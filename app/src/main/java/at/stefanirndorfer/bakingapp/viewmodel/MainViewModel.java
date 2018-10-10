@@ -54,4 +54,12 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<List<Recipe>> getRecipesLiveData() {
         return mRecipesLiveData;
     }
+
+    /**
+     * TODO: Implement
+     * @param recipe
+     */
+    public void navigateToDetailScreen(Recipe recipe) {
+
+    }
 }

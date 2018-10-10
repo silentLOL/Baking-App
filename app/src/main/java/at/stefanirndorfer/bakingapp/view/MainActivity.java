@@ -4,9 +4,13 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.GridView;
 
 import java.util.List;
 
@@ -29,6 +33,48 @@ public class MainActivity extends AppCompatActivity {
         mViewModel = obtainViewModel(this);
         doSubscriptions();
         mViewModel.start();
+
+        // Determine if you're creating a two-pane or single-pane display
+        if(findViewById(R.id.recipes_li) != null) {
+            // This LinearLayout will only initially exist in the two-pane tablet case
+            mTwoPane = true;
+
+            // Change the GridView to space out the images more on tablet
+            GridView gridView = (GridView) findViewById(R.id.images_grid_view);
+            gridView.setNumColumns(2);
+
+
+            if(savedInstanceState == null) {
+                // In two-pane mode, add initial BodyPartFragments to the screen
+                FragmentManager fragmentManager = getSupportFragmentManager();
+
+                // Creating a new head fragment
+                RecipeDetailFragment headFragment = new BodyPartFragment();
+                headFragment.setImageIds(AndroidImageAssets.getHeads());
+                // Add the fragment to its container using a transaction
+                fragmentManager.beginTransaction()
+                        .add(R.id.head_container, headFragment)
+                        .commit();
+
+                // New body fragment
+                BodyPartFragment bodyFragment = new BodyPartFragment();
+                bodyFragment.setImageIds(AndroidImageAssets.getBodies());
+                fragmentManager.beginTransaction()
+                        .add(R.id.body_container, bodyFragment)
+                        .commit();
+
+                // New leg fragment
+                BodyPartFragment legFragment = new BodyPartFragment();
+                legFragment.setImageIds(AndroidImageAssets.getLegs());
+                fragmentManager.beginTransaction()
+                        .add(R.id.leg_container, legFragment)
+                        .commit();
+            }
+        } else {
+            // We're in single-pane mode and displaying fragments on a phone in separate activities
+            mTwoPane = false;
+        }
+
     }
 
     private void doSubscriptions() {

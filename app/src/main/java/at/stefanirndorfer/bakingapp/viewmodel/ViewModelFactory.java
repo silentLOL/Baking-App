@@ -54,10 +54,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             //noinspection unchecked
             return (T) new MainViewModel(mApplication, mRecipesRepository);
         }
-//        } else if (modelClass.isAssignableFrom(TaskDetailViewModel.class)) {
-//            //noinspection unchecked
-//            return (T) new TaskDetailViewModel(mApplication, mRecipesRepository);
-//        } else if (modelClass.isAssignableFrom(AddEditTaskViewModel.class)) {
+// else if (modelClass.isAssignableFrom(AddEditTaskViewModel.class)) {
 //            //noinspection unchecked
 //            return (T) new AddEditTaskViewModel(mApplication, mRecipesRepository);
 //        } else if (modelClass.isAssignableFrom(TasksViewModel.class)) {
