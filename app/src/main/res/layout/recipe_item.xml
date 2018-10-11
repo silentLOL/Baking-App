@@ -13,19 +13,18 @@
             name="listener"
             type="at.stefanirndorfer.bakingapp.view.input.RecipeItemUserActionListener" />
     </data>
+<android.support.design.card.MaterialCardView
+    style="@style/Widget.MaterialComponents.CardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/mtrl_card_spacing"
+    android:layout_marginTop="@dimen/mtrl_card_spacing"
+    android:layout_marginRight="@dimen/mtrl_card_spacing"
+    android:onClick="@{() -> listener.onRecipeClicked(recipe)}"
+    android:minHeight="200dp">
 
-    <com.google.android.material.card.MaterialCardView
-        style="@style/Widget.MaterialComponents.CardView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/mtrl_card_spacing"
-        android:layout_marginTop="@dimen/mtrl_card_spacing"
-        android:layout_marginRight="@dimen/mtrl_card_spacing"
-        android:onClick="@{() -> listener.onRecipeClicked(recipe)}"
-        android:minHeight="200dp">
+    <!-- Card contents. -->
 
-        <!-- Card contents. -->
-
-    </com.google.android.material.card.MaterialCardView>
+</android.support.design.card.MaterialCardView>
 
 </layout>
