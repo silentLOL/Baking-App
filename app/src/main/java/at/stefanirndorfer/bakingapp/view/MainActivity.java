@@ -25,6 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
     private MainViewModel mViewModel;
 
+    // Track whether to display a two-pane or single-pane UI
+    // A single-pane display refers to phone screens, and two-pane to larger tablet screens
+    private boolean mTwoPane;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,16 +39,16 @@ public class MainActivity extends AppCompatActivity {
         mViewModel.start();
 
         // Determine if you're creating a two-pane or single-pane display
-        if(findViewById(R.id.recipes_li) != null) {
+        if (findViewById(R.id.recipe_detail_linear_layout) != null) {
             // This LinearLayout will only initially exist in the two-pane tablet case
             mTwoPane = true;
 
             // Change the GridView to space out the images more on tablet
-            GridView gridView = (GridView) findViewById(R.id.images_grid_view);
+            GridView gridView = (GridView) findViewById(R.id.recipes_grid_view);
             gridView.setNumColumns(2);
 
 
-            if(savedInstanceState == null) {
+            if (savedInstanceState == null) {
                 // In two-pane mode, add initial BodyPartFragments to the screen
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -54,20 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 // Add the fragment to its container using a transaction
                 fragmentManager.beginTransaction()
                         .add(R.id.head_container, headFragment)
-                        .commit();
-
-                // New body fragment
-                BodyPartFragment bodyFragment = new BodyPartFragment();
-                bodyFragment.setImageIds(AndroidImageAssets.getBodies());
-                fragmentManager.beginTransaction()
-                        .add(R.id.body_container, bodyFragment)
-                        .commit();
-
-                // New leg fragment
-                BodyPartFragment legFragment = new BodyPartFragment();
-                legFragment.setImageIds(AndroidImageAssets.getLegs());
-                fragmentManager.beginTransaction()
-                        .add(R.id.leg_container, legFragment)
                         .commit();
             }
         } else {
@@ -84,30 +74,30 @@ public class MainActivity extends AppCompatActivity {
     private void subscribeOnRecipes() {
         Timber.d("Subscribing on Recipe data.");
         final Observer<List<Recipe>> recipesObserver = recipes -> {
-          if (recipes != null && !recipes.isEmpty()){
-              StringBuilder sb = new StringBuilder("Received the following recipies via live data: \n");
-              for (Recipe currElement : recipes) {
-                  sb.append(currElement.toString());
-                  sb.append("\n");
-              }
-              Timber.d(sb.toString());
-          } else {
-              Timber.d("No recipes received from view model");
-          }
+            if (recipes != null && !recipes.isEmpty()) {
+                StringBuilder sb = new StringBuilder("Received the following recipies via live data: \n");
+                for (Recipe currElement : recipes) {
+                    sb.append(currElement.toString());
+                    sb.append("\n");
+                }
+                Timber.d(sb.toString());
+            } else {
+                Timber.d("No recipes received from view model");
+            }
         };
-        mViewModel.getRecipesLiveData().observe(this,recipesObserver);
+        mViewModel.getRecipesLiveData().observe(this, recipesObserver);
     }
 
     //    private void setupViewFragment() {
-//        MainFragment mainFragment =
-//                (MainFragment) getSupportFragmentManager().findFragmentById(R.id.mainContentFrame);
-//        if (mainFragment == null) {
-//            // Create the fragment
-//            mainFragment = MainFragment.newInstance();
-//            ActivityUtils.replaceFragmentInActivity(
-//                    getSupportFragmentManager(), mainFragment, R.id.mainContentFrame);
-//        }
-//    }
+    //        MainFragment mainFragment =
+    //                (MainFragment) getSupportFragmentManager().findFragmentById(R.id.mainContentFrame);
+    //        if (mainFragment == null) {
+    //            // Create the fragment
+    //            mainFragment = MainFragment.newInstance();
+    //            ActivityUtils.replaceFragmentInActivity(
+    //                    getSupportFragmentManager(), mainFragment, R.id.mainContentFrame);
+    //        }
+    //    }
 
     public static MainViewModel obtainViewModel(FragmentActivity activity) {
         // Use a Factory to inject dependencies into the ViewModel

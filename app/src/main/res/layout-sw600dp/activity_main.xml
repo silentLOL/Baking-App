@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -14,6 +15,15 @@
             android:name="at.stefanirndorfer.bakingapp.view.MainListFragment"
             android:layout_width="400dp"
             android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/recipe_detail_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- todo: this is where the steps/ingredients are shown on Tablets -->
+        </LinearLayout>
 
     </LinearLayout>
 </layout>
