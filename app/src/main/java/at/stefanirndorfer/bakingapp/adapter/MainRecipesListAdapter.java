@@ -17,6 +17,7 @@ import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.databinding.RecipeItemBinding;
 import at.stefanirndorfer.bakingapp.view.input.RecipeItemUserActionListener;
 import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
+import timber.log.Timber;
 
 public class MainRecipesListAdapter extends BaseAdapter {
 
@@ -39,6 +40,7 @@ public class MainRecipesListAdapter extends BaseAdapter {
             @Override
             public void onChanged(@Nullable List<Recipe> recipes) {
                 if (recipes != null && !recipes.isEmpty()) {
+                    Timber.d("received list of recipes from viewmodel. Length: " + recipes.size());
                     setRecipes(recipes);
                 }
             }

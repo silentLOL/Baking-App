@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data>
-        <!--
-        <import type="android.view.View" />
-        -->
         <variable
             name="viewModel"
             type="at.stefanirndorfer.bakingapp.viewmodel.MainViewModel" />
@@ -16,15 +12,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/recipes_list_view"
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/recipes_grid_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7"
             android:adjustViewBounds="true"
+            android:columnWidth="180dp"
             android:gravity="center"
             android:horizontalSpacing="8dp"
-            android:padding="16dp" />
+            android:numColumns="3"
+            android:padding="16dp"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="8dp" />
     </LinearLayout>
 
 </layout>
