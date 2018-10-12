@@ -25,6 +25,7 @@
 
     <!-- Card contents. -->
     <TextView
+        style="@style/cardH1"
         android:id="@+id/recipe_name_tv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
