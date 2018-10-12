@@ -24,6 +24,11 @@
     android:minHeight="200dp">
 
     <!-- Card contents. -->
+    <TextView
+        android:id="@+id/recipe_name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@{recipe.getName()}"/>
 
 </android.support.design.card.MaterialCardView>
 
