@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools">
+    xmlns:tool="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <import type="android.view.View.OnClickListener" />
+        <import type="java.lang.String" />
+        <import type="java.lang.Integer" />
+
 
         <variable
             name="recipe"
@@ -19,47 +22,63 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="@dimen/mtrl_card_spacing"
+        android:layout_marginTop="@dimen/mtrl_card_spacing"
+        android:layout_marginRight="@dimen/mtrl_card_spacing"
         android:minHeight="200dp"
         android:onClick="@{() -> listener.onRecipeClicked(recipe)}">
 
+        <!-- Card contents. -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/primaryLightColor"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="16dp">
 
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 tool:srcCompat="@drawable/ic_toertchen" />
 
-            <TextView
-                android:id="@+id/recipe_name_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@{() -> recipe.name}"
-                tool:text="Headline" />
-            <!--android:textAppearance="@android:style/TextAppearance.Material.Headline"-->
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/recipe_name_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="50dp"
+                    android:text="@{recipe.getName()}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@color/secondaryLightColor" />
+
+                <TextView
+                    android:id="@+id/recipe_servings_tv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{String.valueOf(recipe.getServings()) + ` servings`}"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
 
 
+            </LinearLayout>
         </LinearLayout>
-        <!-- Card contents. -->
-
-        <TextView
-            android:id="@+id/recipe_servings_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="74dp"
-            android:layout_marginTop="58dp"
-            tool:text="Headline" />
-        <!--android:text="@{() -> recipe.getServings()}" -->
-        <!-- android:textAppearance="@android:style/TextAppearance.Material.Subhead"-->
 
     </android.support.design.card.MaterialCardView>
 
