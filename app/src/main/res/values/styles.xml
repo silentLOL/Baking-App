@@ -8,8 +8,4 @@
         <item name="colorAccent">@color/secondaryColor</item>
     </style>
 
-    <style name="cardH1">
-        <item name="android:textSize">@dim/</item>
-    </style>
-
 </resources>
