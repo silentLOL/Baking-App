@@ -5,7 +5,11 @@
     <data>
 
         <import type="android.view.View.OnClickListener" />
+
+        <import type="android.view.View" />
+
         <import type="java.lang.String" />
+
         <import type="java.lang.Integer" />
 
 
@@ -32,15 +36,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:gravity="center"
+            android:orientation="horizontal"
             android:padding="16dp">
 
             <ImageView
+                android:id="@+id/recipe_placeholder_iv"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/placeholder_img_content_description"
+                android:scaleType="centerCrop"
+                android:visibility="@{!recipe.getImageUrl().equals(``) ?  View.GONE : View.VISIBLE}"
+                tool:srcCompat="@drawable/ic_toertchen" />
+
+            <ImageView
+                android:id="@+id/recipe_image_iv"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/placeholder_img_content_description"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
                 tool:srcCompat="@drawable/ic_toertchen" />
 
             <LinearLayout
@@ -74,9 +95,8 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:text="@{String.valueOf(recipe.getServings()) + ` servings`}"
+                    android:textAllCaps="true"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
-
-
             </LinearLayout>
         </LinearLayout>
 

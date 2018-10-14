@@ -4,6 +4,7 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.text.TextUtils;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -31,20 +32,26 @@ public class Recipe {
     @SerializedName("servings")
     private Integer servings;
 
-    public Recipe(Integer id, String name, List<Ingredient> ingredients, List<Step> steps, Integer servings) {
+    @SerializedName("image")
+    @ColumnInfo(name = "image_url")
+    private String imageUrl;
+
+    public Recipe(Integer id, String name, List<Ingredient> ingredients, List<Step> steps, Integer servings, String imageUrl) {
         this.id = id;
         this.name = name;
         this.ingredients = ingredients;
         this.steps = steps;
         this.servings = servings;
+        this.imageUrl = imageUrl;
     }
 
-    public Recipe(Integer id, String name, Integer servings) {
+    public Recipe(Integer id, String name, Integer servings, String imageUrl) {
         this.id = id;
         this.name = name;
         this.ingredients = null;
         this.steps = null;
         this.servings = servings;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -88,5 +95,11 @@ public class Recipe {
         this.servings = servings;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }

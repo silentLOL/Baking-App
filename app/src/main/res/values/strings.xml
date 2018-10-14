@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Baking App</string>
+    <string name="placeholder_img_content_description">Placeholder image which is showing a muffin.</string>
 </resources>
