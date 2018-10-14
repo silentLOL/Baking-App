@@ -3,13 +3,15 @@ package at.stefanirndorfer.bakingapp.viewmodel;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
+import com.squareup.picasso.Callback;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 
@@ -51,12 +53,17 @@ public class MainViewModel extends AndroidViewModel {
         mRecipeRepository.getRecipes().observeForever(recipes -> mRecipesLiveData.setValue(recipes));
     }
 
-    public MutableLiveData<List<Recipe>> getRecipesLiveData() {
+    public void loadRecipeImage(ImageView target, String imageUrl, Callback callback){
+        mRecipeRepository.loadImageForRecipe(mContext, target, imageUrl, callback);
+    }
+
+                                 public MutableLiveData<List<Recipe>>getRecipesLiveData() {
         return mRecipesLiveData;
     }
 
     /**
      * TODO: Implement
+     *
      * @param recipe
      */
     public void navigateToDetailScreen(Recipe recipe) {

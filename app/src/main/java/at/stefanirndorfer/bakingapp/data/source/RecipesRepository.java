@@ -1,8 +1,11 @@
 package at.stefanirndorfer.bakingapp.data.source;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 import java.util.Map;
@@ -215,5 +218,10 @@ public class RecipesRepository implements RecipesDataSource {
     @Override
     public void saveIngredient(Ingredient ingredient) {
 
+    }
+
+    @Override
+    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback) {
+        mRecipesRemoteDataSource.loadImageForRecipe(context, target, imageUrl, callback);
     }
 }

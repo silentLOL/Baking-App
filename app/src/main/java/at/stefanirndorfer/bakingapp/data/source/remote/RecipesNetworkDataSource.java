@@ -1,8 +1,12 @@
 package at.stefanirndorfer.bakingapp.data.source.remote;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,11 +45,11 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
 
         RequestRecipesService service = RetrofitClient.getRetrofitInstance().create(RequestRecipesService.class);
         Call<List<Recipe>> call = service.getRecipes();
-        Timber.d( call.request().toString());
+        Timber.d(call.request().toString());
         call.enqueue(new Callback<List<Recipe>>() {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-                Timber.d( "Received response");
+                Timber.d("Received response");
                 if (response.body() != null) {
                     List<Recipe> result = response.body();
                     if (!result.isEmpty()) {
@@ -121,5 +125,18 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
     @Override
     public void saveIngredient(Ingredient ingredient) {
 
+    }
+
+    /**
+     * loads an image source directly into an ImageView instance by using the Picasso library
+     * @param context
+     * @param target ImageView
+     * @param imageUrl
+     * @param callback
+     */
+    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, com.squareup.picasso.Callback callback) {
+        Picasso.with(context)
+                .load(imageUrl)
+                .into(target, callback);
     }
 }

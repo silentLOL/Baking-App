@@ -1,7 +1,11 @@
 package at.stefanirndorfer.bakingapp.data.source.fake;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -90,6 +94,11 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
 
     @Override
     public void saveIngredient(Ingredient ingredient) {
+
+    }
+
+    @Override
+    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback) {
 
     }
 }

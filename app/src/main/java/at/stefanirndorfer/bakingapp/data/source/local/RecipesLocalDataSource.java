@@ -1,7 +1,11 @@
 package at.stefanirndorfer.bakingapp.data.source.local;
 
 import android.arch.lifecycle.MutableLiveData;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 
@@ -136,5 +140,10 @@ public class RecipesLocalDataSource implements RecipesDataSource {
             mIngredientsDao.insertIngredient(ingredient);
         };
         mAppExecutors.diskIO().execute(runnable);
+    }
+
+    @Override
+    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback) {
+        // noting to do locally
     }
 }

@@ -40,6 +40,14 @@
             android:orientation="horizontal"
             android:padding="16dp">
 
+            <ProgressBar
+                android:id="@+id/recipe_image_pb"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:visibility="gone" />
+
             <ImageView
                 android:id="@+id/recipe_placeholder_iv"
                 android:layout_width="120dp"
@@ -59,10 +67,9 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/placeholder_img_content_description"
+                android:contentDescription="@string/contentDescription_Recipe_Image"
                 android:scaleType="centerCrop"
-                android:visibility="gone"
-                tool:srcCompat="@drawable/ic_toertchen" />
+                android:visibility="gone" />
 
             <LinearLayout
                 android:layout_width="match_parent"

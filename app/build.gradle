@@ -35,6 +35,11 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
 
+    // picasso
+    implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
+    implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.picassoDownloaderVersion"
+
+
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
 

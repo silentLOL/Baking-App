@@ -5,10 +5,13 @@ import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
+import com.squareup.picasso.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +86,32 @@ public class MainRecipesListAdapter extends BaseAdapter {
                 mViewModel.navigateToDetailScreen(recipe);
             }
         };
-
         binding.setRecipe(mRecipes.get(i));
+
+        //fetch image resource if existing
+        String imageUrl = mRecipes.get(i).getImageUrl();
+        if (!TextUtils.isEmpty(imageUrl)) {
+            mViewModel.loadRecipeImage(binding.recipeImageIv, imageUrl,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Timber.d("success loading image for recipe: " + mRecipes.get(i).getName());
+                            binding.recipeImageIv.setVisibility(View.VISIBLE);
+                            binding.recipePlaceholderIv.setVisibility(View.GONE);
+                            binding.recipeImagePb.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Timber.e("Error loading image for recipe: " + mRecipes.get(i).getName());
+                            binding.recipeImageIv.setVisibility(View.GONE);
+                            binding.recipePlaceholderIv.setVisibility(View.VISIBLE);
+                            binding.recipeImagePb.setVisibility(View.GONE);
+                        }
+                    }
+            );
+            binding.recipeImagePb.setVisibility(View.VISIBLE);
+        }
         binding.setListener(userActionListener);
         binding.executePendingBindings();
         return binding.getRoot();
