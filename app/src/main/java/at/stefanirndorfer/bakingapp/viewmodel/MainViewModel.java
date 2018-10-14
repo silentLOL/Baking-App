@@ -4,7 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import com.squareup.picasso.Callback;
+import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
@@ -17,9 +17,12 @@ import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.source.RecipesRepository;
+import at.stefanirndorfer.bakingapp.view.DetailActivity;
 import timber.log.Timber;
 
 public class MainViewModel extends AndroidViewModel {
+
+    private static final String RECIPE_ID_EXTRA = "recipe_id_extra";
 
     // These observable fields will update Views automatically
     public final ObservableList<Recipe> items = new ObservableArrayList<>();
@@ -53,20 +56,21 @@ public class MainViewModel extends AndroidViewModel {
         mRecipeRepository.getRecipes().observeForever(recipes -> mRecipesLiveData.setValue(recipes));
     }
 
-    public void loadRecipeImage(ImageView target, String imageUrl, Callback callback){
+    public void loadRecipeImage(ImageView target, String imageUrl, Callback callback) {
         mRecipeRepository.loadImageForRecipe(mContext, target, imageUrl, callback);
     }
 
-                                 public MutableLiveData<List<Recipe>>getRecipesLiveData() {
+    public MutableLiveData<List<Recipe>> getRecipesLiveData() {
         return mRecipesLiveData;
     }
 
     /**
-     * TODO: Implement
      *
      * @param recipe
      */
     public void navigateToDetailScreen(Recipe recipe) {
-
+        Intent intent = new Intent(mContext, DetailActivity.class);
+        intent.putExtra(RECIPE_ID_EXTRA, recipe.getId());
+        mContext.startActivity(intent);
     }
 }
