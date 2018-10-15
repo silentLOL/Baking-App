@@ -1,24 +1,22 @@
 package at.stefanirndorfer.bakingapp.view;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import at.stefanirndorfer.bakingapp.R;
-import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
-
-import static at.stefanirndorfer.bakingapp.viewmodel.MainViewModel.RECIPE_ID_EXTRA;
+import timber.log.Timber;
 
 public class DetailActivity extends AppCompatActivity {
-    private static final String RECIPE_ID_EXTRA = "recipe_id_extra";
 
+    public static final String RECIPE_ID_EXTRA = "recipe_id";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        Intent intent = getIntent();
-        String id = intent.getStringExtra(RECIPE_ID_EXTRA);
+        Bundle bundle = getIntent().getExtras();
+        int recipeId = (int) bundle.get(RECIPE_ID_EXTRA);
+        Timber.d("DetailActivity created with recipe id: " + recipeId);
     }
 }

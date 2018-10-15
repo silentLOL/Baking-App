@@ -22,8 +22,7 @@ import timber.log.Timber;
 
 public class MainViewModel extends AndroidViewModel {
 
-    private static final String RECIPE_ID_EXTRA = "recipe_id_extra";
-
+    public static final String RECIPE_ID_EXTRA = "recipe_id";
     // These observable fields will update Views automatically
     public final ObservableList<Recipe> items = new ObservableArrayList<>();
 
@@ -65,7 +64,8 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     /**
-     *
+     * Navigates to the DetailActivity
+     * and puts the recipes id as extra
      * @param recipe
      */
     public void navigateToDetailScreen(Recipe recipe) {
