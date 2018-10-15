@@ -53,14 +53,15 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void deleteRecipe(@NonNull String recipeId) {
+    public void deleteRecipe(int recipeId) {
 
     }
 
     @Override
-    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
+    public MutableLiveData<List<Step>> getStepsForRecipe(int recipeId) {
         return null;
     }
+
 
     @Override
     public void deleteAllSteps() {
@@ -78,9 +79,10 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
     }
 
     @Override
-    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
         return null;
     }
+
 
     @Override
     public void deleteAllIngredients() {

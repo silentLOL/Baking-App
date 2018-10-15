@@ -64,7 +64,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+    public MutableLiveData<Recipe> getRecipe(int recipeId) {
         MutableLiveData<Recipe> returningValue = new MutableLiveData<>();
         Runnable runnable = () -> returningValue.postValue(mRecipesDao.getRecipesById(recipeId));
         mAppExecutors.diskIO().execute(runnable);
@@ -90,14 +90,22 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void deleteRecipe(@NonNull String recipeId) {
+    public void deleteRecipe(int recipeId) {
 
     }
 
     @Override
-    public MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId) {
-        return null;
+    public MutableLiveData<List<Step>> getStepsForRecipe(int recipeId) {
+        MutableLiveData<List<Step>> steps = new MutableLiveData<>();
+        Runnable runnable = () -> {
+            List<Step> stepsForRecipe = mStepsDao.getStepsForRecipe(recipeId);
+            Timber.d("Received " + stepsForRecipe.size() + " steps from Database");
+            steps.postValue(stepsForRecipe);
+        };
+        mAppExecutors.diskIO().execute(runnable);
+        return steps;
     }
+
 
     @Override
     public void deleteAllSteps() {
@@ -110,7 +118,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void saveStep(Step step) {
+    public void saveStep(@NonNull Step step) {
         Runnable runnable = () -> {
             Timber.d("inserting step: " + step.getShortDescription() + " into db.");
             mStepsDao.insertStep(step);
@@ -119,9 +127,17 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     }
 
     @Override
-    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId) {
-        return null;
+    public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
+        MutableLiveData<List<Ingredient>> ingredients = new MutableLiveData<>();
+        Runnable runnable = () -> {
+            List<Ingredient> ingredientsForRecipe = mIngredientsDao.getIngredientsForRecipe(recipeId);
+            Timber.d("Received " + ingredientsForRecipe.size() + " ingredients from Database");
+            ingredients.postValue(ingredientsForRecipe);
+        };
+        mAppExecutors.diskIO().execute(runnable);
+        return ingredients;
     }
+
 
     @Override
     public void deleteAllIngredients() {

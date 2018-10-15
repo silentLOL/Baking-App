@@ -30,13 +30,13 @@ public interface RecipesDataSource {
 
     void deleteAllRecipes();
 
-    void deleteRecipe(@NonNull String recipeId);
+    void deleteRecipe(int recipeId);
 
     //--------------------------------
     // Steps
     //--------------------------------
 
-    MutableLiveData<List<Step>> getStepsForRecipe(@NonNull String recipeId);
+    MutableLiveData<List<Step>> getStepsForRecipe(int recipeId);
 
     void deleteAllSteps();
 
@@ -48,7 +48,7 @@ public interface RecipesDataSource {
     // Ingredients
     //--------------------------------
 
-    MutableLiveData<List<Ingredient>> getIngredientsForRecipe(@NonNull String recipeId);
+    MutableLiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId);
 
     void deleteAllIngredients();
 

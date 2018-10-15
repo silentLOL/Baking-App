@@ -51,6 +51,7 @@ public class MainViewModel extends AndroidViewModel {
      */
     private void loadRecipes(boolean showLoadingUI) {
         if (showLoadingUI) {
+            //TODO: come up with a loading-ui
             dataLoading.set(true);
         }
         mRecipeRepository.getRecipes().observeForever(recipes -> mRecipesLiveData.setValue(recipes));

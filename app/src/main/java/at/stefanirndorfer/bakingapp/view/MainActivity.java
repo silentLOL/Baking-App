@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setupViewFragment();
         mViewModel = obtainViewModel(this);
         doSubscriptions();
         mViewModel.start();
@@ -35,21 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Determine if you're creating a two-pane or single-pane display
         if (findViewById(R.id.main_grid_fragment) != null) {
-
             mIsTablet = true;
-
-            //if (savedInstanceState == null) {
-
-
-//                // Creating a new grid fragment
-//                MainGridFragment gridFragment = new MainGridFragment();
-//                // Add the fragment to its container using a transaction
-//                fragmentManager.beginTransaction()
-//                        .add(R.id.head_container, headFragment)
-//                        .commit();
-            //}
         } else {
-            // We're in single-pane mode and displaying fragments on a phone in separate activities
             mIsTablet = false;
         }
 
@@ -75,17 +61,6 @@ public class MainActivity extends AppCompatActivity {
         };
         mViewModel.getRecipesLiveData().observe(this, recipesObserver);
     }
-
-    //    private void setupViewFragment() {
-    //        MainFragment mainFragment =
-    //                (MainFragment) getSupportFragmentManager().findFragmentById(R.id.mainContentFrame);
-    //        if (mainFragment == null) {
-    //            // Create the fragment
-    //            mainFragment = MainFragment.newInstance();
-    //            ActivityUtils.replaceFragmentInActivity(
-    //                    getSupportFragmentManager(), mainFragment, R.id.mainContentFrame);
-    //        }
-    //    }
 
     public static MainViewModel obtainViewModel(FragmentActivity activity) {
         // Use a Factory to inject dependencies into the ViewModel
