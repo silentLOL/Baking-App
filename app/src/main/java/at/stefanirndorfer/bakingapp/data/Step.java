@@ -17,12 +17,15 @@ import static android.arch.persistence.room.ForeignKey.CASCADE;
 
 public class Step {
 
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "step_unique_id")
+    private Integer stepUniqueId;
+
     @ColumnInfo(name = "recipe_id")
     private Integer recipeId;
 
 
     @SerializedName("id")
-    @PrimaryKey
     @ColumnInfo(name = "step_id")
     private Integer id;
 
@@ -52,7 +55,8 @@ public class Step {
         this.thumbnailURL = thumbnailURL;
     }
 
-    public Step(Integer recipeId, Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+    public Step(Integer stepUniqueId, Integer recipeId, Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+        this.stepUniqueId = stepUniqueId;
         this.recipeId = recipeId;
         this.id = id;
         this.shortDescription = shortDescription;
@@ -107,5 +111,13 @@ public class Step {
 
     public void setRecipeId(Integer recipeId) {
         this.recipeId = recipeId;
+    }
+
+    public Integer getStepUniqueId() {
+        return stepUniqueId;
+    }
+
+    public void setStepUniqueId(Integer stepUniqueId) {
+        this.stepUniqueId = stepUniqueId;
     }
 }

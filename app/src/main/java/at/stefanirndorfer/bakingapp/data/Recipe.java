@@ -21,11 +21,11 @@ public class Recipe {
     @SerializedName("name")
     private String name;
 
-    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the best way */
+    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the way */
     @SerializedName("ingredients")
     private List<Ingredient> ingredients;
 
-    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the best way */
+    @Ignore /* we build up a dedicated table and set the foreign key programmatically ... not sure if this is the way */
     @SerializedName("steps")
     private List<Step> steps;
 
