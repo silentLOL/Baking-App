@@ -24,7 +24,7 @@ public interface RecipesDataSource {
     //--------------------------------
     MutableLiveData<List<Recipe>> getRecipes();
 
-    MutableLiveData<Recipe> getRecipe(@NonNull int recipeId);
+    MutableLiveData<Recipe> getRecipe(int recipeId);
 
     void saveRecipe(@NonNull Recipe recipe);
 

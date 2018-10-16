@@ -2,10 +2,9 @@ package at.stefanirndorfer.bakingapp.data.source;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
@@ -37,6 +36,7 @@ public class RecipesRepository implements RecipesDataSource {
     private volatile static RecipesRepository INSTANCE = null;
     private final RecipesDataSource mRecipesRemoteDataSource;
     private final RecipesDataSource mRecipesLocalDataSource;
+    private Object lock = new Object();
 
     /**
      * This variable has package local visibility so it can be accessed from tests.
@@ -211,39 +211,45 @@ public class RecipesRepository implements RecipesDataSource {
     }
 
     private void supplementSteps(int recipeId, MutableLiveData<Recipe> detailedRecipe, Recipe resultingRecipe, String key) {
-        if (resultingRecipe.getSteps() == null){
-            mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(new Observer<List<Step>>() {
-                @Override
-                public void onChanged(@Nullable List<Step> steps) {
-                    resultingRecipe.setSteps(steps);
-                    if (steps != null && !steps.isEmpty()) {
-                        mCachedRecipes.remove(key); /* replace is not available on our api-level */
-                        mCachedRecipes.put(key, resultingRecipe);
-                    }
-                    detailedRecipe.postValue(resultingRecipe);
+        if (resultingRecipe.getSteps() == null || resultingRecipe.getSteps().isEmpty()) {
+            Timber.d("Requesting steps for recipe id: " + recipeId + " from database");
+            mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(steps -> {
+                resultingRecipe.setSteps(steps);
+                if (steps != null && !steps.isEmpty()) {
+                    saveReplaceRecipe(resultingRecipe, key);
                 }
+                detailedRecipe.postValue(resultingRecipe);
             });
         }
     }
 
     private void supplementIngredients(int recipeId, MutableLiveData<Recipe> detailedRecipe, Recipe resultingRecipe, String key) {
-        if (resultingRecipe.getIngredients() == null) {
-            mRecipesLocalDataSource.getIngredientsForRecipe(recipeId).observeForever(new Observer<List<Ingredient>>() {
-                @Override
-                public void onChanged(@Nullable List<Ingredient> ingredients) {
-                    resultingRecipe.setIngredients(ingredients);
-                    if (ingredients != null && !ingredients.isEmpty()) {
-                        mCachedRecipes.remove(key); /* replace is not available on our api-level */
-                        mCachedRecipes.put(key, resultingRecipe);
-                    }
-                    detailedRecipe.postValue(resultingRecipe);
+        if (resultingRecipe.getIngredients() == null || resultingRecipe.getIngredients().isEmpty()) {
+            Timber.d("Requesting ingredients for recipe id: " + recipeId + " from database");
+            mRecipesLocalDataSource.getIngredientsForRecipe(recipeId).observeForever(ingredients -> {
+                resultingRecipe.setIngredients(ingredients);
+                if (ingredients != null && !ingredients.isEmpty()) {
+                    saveReplaceRecipe(resultingRecipe, key);
                 }
+                detailedRecipe.postValue(resultingRecipe);
             });
         }
     }
 
+    private void saveReplaceRecipe(Recipe resultingRecipe, String key) {
+        synchronized (lock) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                mCachedRecipes.replace(key, resultingRecipe);
+            } else {
+                mCachedRecipes.remove(key); /* replace is not available on our api-level */
+                mCachedRecipes.put(key, resultingRecipe);
+
+            }
+        }
+    }
+
     @Override
-    public MutableLiveData<Recipe> getRecipe(@NonNull int recipeId) {
+    public MutableLiveData<Recipe> getRecipe(int recipeId) {
         return null;
     }
 

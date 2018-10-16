@@ -120,7 +120,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     @Override
     public void saveStep(@NonNull Step step) {
         Runnable runnable = () -> {
-            Timber.d("inserting step: " + step.getShortDescription() + " into db.");
+            Timber.d("inserting step: " + step.getShortDescription() + " for recipe id: " + step.getRecipeId() + " into db.");
             mStepsDao.insertStep(step);
         };
         mAppExecutors.diskIO().execute(runnable);
@@ -152,7 +152,7 @@ public class RecipesLocalDataSource implements RecipesDataSource {
     @Override
     public void saveIngredient(Ingredient ingredient) {
         Runnable runnable = () -> {
-            Timber.d("inserting ingredient: " + ingredient.getIngredientName() + " into db.");
+            Timber.d("inserting ingredient: " + ingredient.getIngredientName() + " for recipe id: " + ingredient.getRecipeId() + " into db.");
             mIngredientsDao.insertIngredient(ingredient);
         };
         mAppExecutors.diskIO().execute(runnable);

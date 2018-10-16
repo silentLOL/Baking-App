@@ -42,7 +42,7 @@ public class DetailViewModel extends AndroidViewModel {
         mRecipeRepository.getDetailedRecipe(recipeId).observeForever(recipe -> mDetailedRecipeLiveData.setValue(recipe));
     }
 
-    public MutableLiveData<Recipe> getmDetailedRecipeLiveData() {
+    public MutableLiveData<Recipe> getDetailedRecipeLiveData() {
         return mDetailedRecipeLiveData;
     }
 }

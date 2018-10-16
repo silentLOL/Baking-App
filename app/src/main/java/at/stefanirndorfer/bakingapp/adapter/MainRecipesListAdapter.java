@@ -39,13 +39,10 @@ public class MainRecipesListAdapter extends BaseAdapter {
      * LiveData-subscription on the RecipeData in the ViewModel
      */
     private void subscribeOnRecipeData() {
-        mViewModel.getRecipesLiveData().observe((LifecycleOwner) mContext, new Observer<List<Recipe>>() {
-            @Override
-            public void onChanged(@Nullable List<Recipe> recipes) {
-                if (recipes != null && !recipes.isEmpty()) {
-                    Timber.d("received list of recipes from viewmodel. Length: " + recipes.size());
-                    setRecipes(recipes);
-                }
+        mViewModel.getRecipesLiveData().observe((LifecycleOwner) mContext, recipes -> {
+            if (recipes != null && !recipes.isEmpty()) {
+                Timber.d("received list of recipes from viewmodel. Length: " + recipes.size());
+                setRecipes(recipes);
             }
         });
     }
@@ -80,12 +77,7 @@ public class MainRecipesListAdapter extends BaseAdapter {
         } else {
             binding = DataBindingUtil.getBinding(view);
         }
-        RecipeItemUserActionListener userActionListener = new RecipeItemUserActionListener() {
-            @Override
-            public void onRecipeClicked(Recipe recipe) {
-                mViewModel.navigateToDetailScreen(recipe);
-            }
-        };
+        RecipeItemUserActionListener userActionListener = recipe -> mViewModel.navigateToDetailScreen(recipe);
         binding.setRecipe(mRecipes.get(i));
 
         //fetch image resource if existing
