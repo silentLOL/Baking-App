@@ -30,6 +30,7 @@ public class DetailActivity extends AppCompatActivity {
         String recipeName = (String) bundle.get(RECIPE_NAME_EXTRA);
         setTitle(recipeName);
         Timber.d("DetailActivity created with recipe id: %s", recipeId);
+        //TODO: rethink back-navigation with the individual fragments
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // get us a viewmodel

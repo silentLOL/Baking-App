@@ -5,13 +5,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-        <!-- The static RecipeDetailFragment -->
-        <fragment
-            android:id="@+id/recipe_detail_fragment"
-            android:name="at.stefanirndorfer.bakingapp.view.RecipeDetailFragment"
+        <FrameLayout
+            android:id="@+id/recipe_detail_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
+
+        <FrameLayout
+            android:id="@+id/ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
+
+        <FrameLayout
+            android:id="@+id/steps_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
 
     </FrameLayout>
 </layout>

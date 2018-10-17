@@ -23,7 +23,7 @@ public class MainListFragment extends Fragment {
 
         mViewModel = MainActivity.obtainViewModel(getActivity());
 
-        // Get a reference to the GridView in the fragment_main_list xml layout file
+        // Get a reference to the ListView in the fragment_main_list xml layout file
         ListView listView = (ListView) rootView.findViewById(R.id.recipes_list_view);
 
         // Create the adapter
