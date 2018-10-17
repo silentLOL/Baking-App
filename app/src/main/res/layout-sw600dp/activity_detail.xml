@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- The static RecipeDetailFragment -->
+        <fragment
+            android:id="@+id/recipe_detail_fragment"
+            android:name="at.stefanirndorfer.bakingapp.view.RecipeDetailFragment"
+            android:layout_width="400dp"
+            android:layout_height="match_parent" />
+
+        <!-- containers for ingredients and steps -->
+        <FrameLayout
+            android:id="@+id/ingredients_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
+
+        <FrameLayout
+            android:id="@+id/steps_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside" />
+
+    </LinearLayout>
+
+</layout>
