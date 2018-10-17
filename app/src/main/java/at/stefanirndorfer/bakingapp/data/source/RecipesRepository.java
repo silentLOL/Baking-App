@@ -2,9 +2,11 @@ package at.stefanirndorfer.bakingapp.data.source;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
@@ -291,7 +293,23 @@ public class RecipesRepository implements RecipesDataSource {
 
     @Override
     public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
-        return null;
+        final MutableLiveData<List<Ingredient>> ingredientLiveData = new MutableLiveData<>();
+        String key = Integer.toString(recipeId);
+        if (mCachedRecipes.containsKey(key)) {
+            List<Ingredient> ingredients = mCachedRecipes.get(key).getIngredients();
+            if (ingredients != null && !ingredients.isEmpty()){
+                ingredientLiveData.postValue(ingredients);
+            } else {
+                mRecipesLocalDataSource.getIngredientsForRecipe(recipeId).observeForever(new Observer<List<Ingredient>>() {
+                    @Override
+                    public void onChanged(@Nullable List<Ingredient> ingredients) {
+                        ingredientLiveData.postValue(ingredients);
+                        mCachedRecipes.get(key).setIngredients(ingredients);
+                    }
+                });
+            }
+        }
+        return ingredientLiveData;
     }
 
     @Override
