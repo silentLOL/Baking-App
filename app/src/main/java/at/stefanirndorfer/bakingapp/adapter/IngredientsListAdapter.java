@@ -9,16 +9,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Ingredient;
-import at.stefanirndorfer.bakingapp.viewmodel.IngredientsFragmentViewModel;
-import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
+import at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel;
 
 public class IngredientsListAdapter extends BaseAdapter {
 
     private Context context;
-    private final IngredientsFragmentViewModel mViewModel;
+    private final IngredientsViewModel mViewModel;
     private List<Ingredient> mIngredients;
 
-    public IngredientsListAdapter(Context context, IngredientsFragmentViewModel viewModel) {
+    public IngredientsListAdapter(Context context, IngredientsViewModel viewModel) {
         this.context = context;
         this.mViewModel = viewModel;
         mIngredients = new ArrayList<>();

@@ -1,23 +1,21 @@
 package at.stefanirndorfer.bakingapp.view;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
-import at.stefanirndorfer.bakingapp.viewmodel.DetailViewModel;
-import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
 
 public class DetailActivity extends AppCompatActivity {
 
     public static final String RECIPE_ID_EXTRA = "recipe_id";
     public static final String RECIPE_NAME_EXTRA = "recipe_name_extra";
-    private DetailViewModel mViewModel;
+
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +28,27 @@ public class DetailActivity extends AppCompatActivity {
         String recipeName = (String) bundle.get(RECIPE_NAME_EXTRA);
         setTitle(recipeName);
         Timber.d("DetailActivity created with recipe id: %s", recipeId);
+
         //TODO: rethink back-navigation with the individual fragments
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        // get us a viewmodel
-        mViewModel = obtainViewModel(this);
-        mViewModel.start(recipeId);
+        // find out if we run on a Tablet or a Phone
+        mTwoPane = getResources().getBoolean(R.bool.isTablet);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        // we create a RecipeDetailFragment for Phone and Tablet
+        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+        recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
+        fragmentManager.beginTransaction()
+                .add(R.id.recipe_detail_container, recipeDetailFragment)
+                .commit();
+
+
+        if (mTwoPane) {
+
+        }
+
     }
 
     @Override
@@ -47,10 +60,4 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public static DetailViewModel obtainViewModel(FragmentActivity activity) {
-        // Use a Factory to inject dependencies into the ViewModel
-        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
-        DetailViewModel viewModel = ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
-        return viewModel;
-    }
 }

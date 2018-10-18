@@ -1,10 +1,8 @@
 package at.stefanirndorfer.bakingapp.adapter;
 
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;

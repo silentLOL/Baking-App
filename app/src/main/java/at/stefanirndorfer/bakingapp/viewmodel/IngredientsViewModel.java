@@ -15,7 +15,8 @@ import at.stefanirndorfer.bakingapp.data.Ingredient;
 import at.stefanirndorfer.bakingapp.data.source.RecipesRepository;
 import timber.log.Timber;
 
-public class IngredientsFragmentViewModel extends AndroidViewModel {
+public class IngredientsViewModel extends AndroidViewModel {
+
     //TODO: Check if LiveData make Observable values obsolete
     public final ObservableBoolean dataLoading = new ObservableBoolean(false);
 
@@ -23,7 +24,7 @@ public class IngredientsFragmentViewModel extends AndroidViewModel {
     private final RecipesRepository mRecipeRepository;
     private final Context mContext; /* Application Context! */
 
-    public IngredientsFragmentViewModel(@NonNull Application application, RecipesRepository repository) {
+    public IngredientsViewModel(@NonNull Application application, RecipesRepository repository) {
         super(application);
         this.mContext = application.getApplicationContext();
         mRecipeRepository = repository;
@@ -53,7 +54,7 @@ public class IngredientsFragmentViewModel extends AndroidViewModel {
         });
     }
 
-    public MutableLiveData<List<Ingredient>> getmIngredients() {
+    public MutableLiveData<List<Ingredient>> getIngredients() {
         return mIngredients;
     }
 }

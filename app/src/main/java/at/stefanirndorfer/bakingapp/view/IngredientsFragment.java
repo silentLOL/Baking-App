@@ -15,12 +15,12 @@ import android.widget.ListView;
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.IngredientsListAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentIngredientsBinding;
-import at.stefanirndorfer.bakingapp.viewmodel.IngredientsFragmentViewModel;
+import at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 
 public class IngredientsFragment extends Fragment {
 
-    private IngredientsFragmentViewModel mViewModel;
+    private IngredientsViewModel mViewModel;
     private int mRecipeId;
 
     @Nullable
@@ -34,7 +34,6 @@ public class IngredientsFragment extends Fragment {
         // Assign the component to a property in the binding class.
         binding.setViewModel(mViewModel);
         binding.setLifecycleOwner(this);
-
 
         setupAdapter(rootView);
 
@@ -66,10 +65,10 @@ public class IngredientsFragment extends Fragment {
         }
     }
 
-    public static IngredientsFragmentViewModel obtainViewModel(FragmentActivity activity) {
+    public static IngredientsViewModel obtainViewModel(FragmentActivity activity) {
         // Use a Factory to inject dependencies into the ViewModel
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
-        IngredientsFragmentViewModel viewModel = ViewModelProviders.of(activity, factory).get(IngredientsFragmentViewModel.class);
+        IngredientsViewModel viewModel = ViewModelProviders.of(activity, factory).get(IngredientsViewModel.class);
         return viewModel;
     }
 }

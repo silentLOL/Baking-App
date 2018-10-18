@@ -272,7 +272,20 @@ public class RecipesRepository implements RecipesDataSource {
 
     @Override
     public MutableLiveData<List<Step>> getStepsForRecipe(int recipeId) {
-        return mRecipesLocalDataSource.getStepsForRecipe(recipeId);
+        final MutableLiveData<List<Step>> stepsLiveData = new MutableLiveData<>();
+        String key = Integer.toString(recipeId);
+        if (mCachedRecipes.containsKey(key)) {
+            List<Step> steps = mCachedRecipes.get(key).getSteps();
+            if (steps != null && !steps.isEmpty()){
+                stepsLiveData.postValue(steps);
+            } else {
+                mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(stepsReturningValue -> {
+                    stepsLiveData.postValue(stepsReturningValue);
+                    mCachedRecipes.get(key).setSteps(stepsReturningValue);
+                });
+            }
+        }
+        return stepsLiveData;
     }
 
 

@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="at.stefanirndorfer.bakingapp.viewmodel.IngredientsFragmentViewModel">
+            type="at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel">
         </variable>
     </data>
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View.OnClickListener" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="step"
+            type="at.stefanirndorfer.bakingapp.data.Step" />
+
+        <variable
+            name="listener"
+            type="at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- android:onClick="@{listener.onStepClicked(step)}" -->
+
+        <TextView
+            android:id="@+id/step_short_description_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{step.getShortDescription()}" />
+
+    </FrameLayout>
+
+
+</layout>
