@@ -1,7 +1,5 @@
 package at.stefanirndorfer.bakingapp.adapter;
 
-import android.arch.lifecycle.LifecycleOwner;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +17,10 @@ import timber.log.Timber;
 
 public class StepsListAdapter extends BaseAdapter {
 
-    //private final Context mContext;
     private final StepsViewModel mViewModel;
     private List<Step> mSteps;
 
-    public StepsListAdapter(Context mContext, StepsViewModel mViewModel) {
-        //this.mContext = mContext;
+    public StepsListAdapter(StepsViewModel mViewModel) {
         this.mViewModel = mViewModel;
         mSteps = new ArrayList<>();
         subscribeOnStepData();
@@ -34,8 +30,7 @@ public class StepsListAdapter extends BaseAdapter {
      * LiveData-subscription on the StepList in the ViewModel
      */
     private void subscribeOnStepData() {
-        //mViewModel.getSteps().observe((LifecycleOwner) mContext, steps -> {
-        mViewModel.getSteps().observeForever( steps -> {
+        mViewModel.getSteps().observeForever(steps -> {
             if (steps != null && !steps.isEmpty()) {
                 Timber.d("Received list of steps from viewmodel. Length: " + steps.size());
                 setSteps(steps);

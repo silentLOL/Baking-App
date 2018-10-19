@@ -2,11 +2,10 @@ package at.stefanirndorfer.bakingapp.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.widget.GridView;
 
 import java.util.List;
 
@@ -67,5 +66,12 @@ public class MainActivity extends AppCompatActivity {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
         MainViewModel viewModel = ViewModelProviders.of(activity, factory).get(MainViewModel.class);
         return viewModel;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Timber.d("onDestroy");
+        mViewModel.getRecipesLiveData().removeObservers(this);
     }
 }

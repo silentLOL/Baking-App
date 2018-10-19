@@ -1,7 +1,6 @@
 package at.stefanirndorfer.bakingapp.view;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,58 +11,61 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import java.util.Objects;
+
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.IngredientsListAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentIngredientsBinding;
 import at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
+import timber.log.Timber;
 
 public class IngredientsFragment extends Fragment {
 
-    private IngredientsViewModel mViewModel;
     private int mRecipeId;
+    FragmentIngredientsBinding mFragmentBinding;
+    private IngredientsViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_ingredients, container, false);
-        mViewModel = obtainViewModel(this.getActivity());
+        mFragmentBinding = FragmentIngredientsBinding.inflate(inflater, container, false);
 
-        // Inflate view and obtain an instance of the binding class.
-        FragmentIngredientsBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_ingredients);
-        // Assign the component to a property in the binding class.
-        binding.setViewModel(mViewModel);
-        binding.setLifecycleOwner(this);
+        mViewModel = obtainViewModel(Objects.requireNonNull(this.getActivity()));
+        mFragmentBinding.setViewModel(mViewModel);
 
-        setupAdapter(rootView);
+        Bundle extras = getActivity().getIntent().getExtras();
+        int recipeId = (int) extras.get(DetailActivity.RECIPE_ID_EXTRA);
+        mViewModel.start(recipeId);
 
-        return rootView;
+        return mFragmentBinding.getRoot();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setupAdapter(mFragmentBinding.getRoot());
     }
 
     private void setupAdapter(View rootView) {
-        // Get a reference to the ListView in the fragment_main_list xml layout file
+        Timber.d("Setting up IngredientsListAdapter");
+        // Get a reference to the ListView in the xml respective layout file
         ListView listView = (ListView) rootView.findViewById(R.id.ingredients_list_view);
 
         // Create the adapter
         // This adapter takes in the context and a reference of the veiwModel
-        IngredientsListAdapter adapter = new IngredientsListAdapter(getContext(), mViewModel);
+        IngredientsListAdapter adapter = new IngredientsListAdapter(mViewModel);
 
-        // Set the adapter on the GridView
+        // Set the adapter on the ListView
         listView.setAdapter(adapter);
     }
 
-    /**
-     * called by the Activity when the Fragment is created
-     *
-     * @param recipeId
-     */
-    public void setmRecipeIdAndUpdateModel(int recipeId) {
-        if (recipeId != recipeId) {
-            this.mRecipeId = recipeId;
-            mViewModel.start(recipeId);
-
-        }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.getIngredients().removeObservers(this);
     }
+
 
     public static IngredientsViewModel obtainViewModel(FragmentActivity activity) {
         // Use a Factory to inject dependencies into the ViewModel

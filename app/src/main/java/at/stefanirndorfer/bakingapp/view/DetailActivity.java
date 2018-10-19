@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.Objects;
 
@@ -40,13 +41,15 @@ public class DetailActivity extends AppCompatActivity {
         // we create a RecipeDetailFragment for Phone and Tablet
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
         fragmentManager.beginTransaction()
-                .add(R.id.recipe_detail_container, recipeDetailFragment)
+                .add(R.id.detail_fragment_container, recipeDetailFragment)
                 .commit();
-        //recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
 
 
         if (mTwoPane) {
-
+            IngredientsFragment ingredientsFragment = new IngredientsFragment();
+            fragmentManager.beginTransaction()
+                    .add(R.id.ingredients_container, ingredientsFragment)
+                    .commit();
         }
 
     }
@@ -60,4 +63,15 @@ public class DetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void onIngredientsButtonClicked(View view) {
+        showIngredientsFragment();
+    }
+
+    private void showIngredientsFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        IngredientsFragment ingredientsFragment = new IngredientsFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.detail_fragment_container, ingredientsFragment)
+                .commit();
+    }
 }

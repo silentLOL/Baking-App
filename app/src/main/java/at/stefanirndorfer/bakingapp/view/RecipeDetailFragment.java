@@ -1,7 +1,6 @@
 package at.stefanirndorfer.bakingapp.view;
 
 import android.arch.lifecycle.ViewModelProviders;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.StepsListAdapter;
@@ -34,7 +35,7 @@ public class RecipeDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mFragmentBinding = FragmentRecipeDetailBinding.inflate(inflater, container, false);
         // createViewModel
-        mViewModel = obtainViewModel(this.getActivity());
+        mViewModel = obtainViewModel(Objects.requireNonNull(this.getActivity()));
         mFragmentBinding.setViewModel(mViewModel);
 
         Bundle extras = getActivity().getIntent().getExtras();
@@ -52,26 +53,22 @@ public class RecipeDetailFragment extends Fragment {
 
     private void setupAdapter(View rootView) {
         Timber.d("Setting up StepsListAdapter");
-        // Get a reference to the ListView in the fragment_main_list xml layout file
+        // Get a reference to the ListView in the respective xml layout file
         ListView listView = (ListView) rootView.findViewById(R.id.steps_list_view);
 
         // Create the adapter
         // This adapter takes in the context and a reference of the viewModel
-        StepsListAdapter adapter = new StepsListAdapter(getContext(), mViewModel);
+        StepsListAdapter adapter = new StepsListAdapter(mViewModel);
 
         // Set the adapter on the ListView
         listView.setAdapter(adapter);
     }
 
-    /**
-     * called by the Activity when the Fragment is created
-     *
-     * @param recipeId
-     */
-    public void setRecipeIdAndUpdateModel(int recipeId) {
-        Timber.d("Setting recipe Id to : " + recipeId);
-        this.mRecipeId = recipeId;
-        mViewModel.start(recipeId);
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mViewModel.getSteps().removeObservers(this);
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {
