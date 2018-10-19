@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Callback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,7 @@ public class RecipesRepository implements RecipesDataSource {
     public MutableLiveData<List<Recipe>> getRecipes() {
         if (mCachedRecipes != null && !mRecipesCacheIsDirty) {
             Timber.d("Recipe data are already cached.");
-            mRecipiesLiveData.postValue((List<Recipe>) mCachedRecipes.values());
+            mRecipiesLiveData.postValue(new ArrayList<>(mCachedRecipes.values()));
         }
         if (!mRecipesCacheIsDirty) {
             // lets ask the local source first ...
@@ -276,7 +277,7 @@ public class RecipesRepository implements RecipesDataSource {
         String key = Integer.toString(recipeId);
         if (mCachedRecipes.containsKey(key)) {
             List<Step> steps = mCachedRecipes.get(key).getSteps();
-            if (steps != null && !steps.isEmpty()){
+            if (steps != null && !steps.isEmpty()) {
                 stepsLiveData.postValue(steps);
             } else {
                 mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(stepsReturningValue -> {
@@ -310,7 +311,7 @@ public class RecipesRepository implements RecipesDataSource {
         String key = Integer.toString(recipeId);
         if (mCachedRecipes.containsKey(key)) {
             List<Ingredient> ingredients = mCachedRecipes.get(key).getIngredients();
-            if (ingredients != null && !ingredients.isEmpty()){
+            if (ingredients != null && !ingredients.isEmpty()) {
                 ingredientLiveData.postValue(ingredients);
             } else {
                 mRecipesLocalDataSource.getIngredientsForRecipe(recipeId).observeForever(new Observer<List<Ingredient>>() {
