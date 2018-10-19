@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import at.stefanirndorfer.bakingapp.R;
-import at.stefanirndorfer.bakingapp.adapter.IngredientsListAdapter;
 import at.stefanirndorfer.bakingapp.adapter.StepsListAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentRecipeDetailBinding;
 import at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel;
@@ -27,25 +26,28 @@ public class RecipeDetailFragment extends Fragment {
 
 
     private int mRecipeId;
+    FragmentRecipeDetailBinding mFragmentBinding;
     private StepsViewModel mViewModel;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
-
+        mFragmentBinding = FragmentRecipeDetailBinding.inflate(inflater, container, false);
         // createViewModel
         mViewModel = obtainViewModel(this.getActivity());
+        mFragmentBinding.setViewModel(mViewModel);
 
-        // Inflate view and obtain an instance of the binding class.
-        FragmentRecipeDetailBinding binding = DataBindingUtil.setContentView(getActivity(), R.layout.fragment_recipe_detail);
-        // Assign the component to a property in the binding class.
-        binding.setViewModel(mViewModel);
-        binding.setLifecycleOwner(this);
+        Bundle extras = getActivity().getIntent().getExtras();
+        int recipeId = (int) extras.get(DetailActivity.RECIPE_ID_EXTRA);
+        mViewModel.start(recipeId);
 
-        setupAdapter(rootView);
+        return mFragmentBinding.getRoot();
+    }
 
-        return rootView;
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setupAdapter(mFragmentBinding.getRoot());
     }
 
     private void setupAdapter(View rootView) {
@@ -67,9 +69,9 @@ public class RecipeDetailFragment extends Fragment {
      * @param recipeId
      */
     public void setRecipeIdAndUpdateModel(int recipeId) {
-            Timber.d("Setting recipe Id to : " + recipeId);
-            this.mRecipeId = recipeId;
-            mViewModel.start(recipeId);
+        Timber.d("Setting recipe Id to : " + recipeId);
+        this.mRecipeId = recipeId;
+        mViewModel.start(recipeId);
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {

@@ -42,7 +42,7 @@ public class DetailActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.recipe_detail_container, recipeDetailFragment)
                 .commit();
-        recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
+        //recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
 
 
         if (mTwoPane) {

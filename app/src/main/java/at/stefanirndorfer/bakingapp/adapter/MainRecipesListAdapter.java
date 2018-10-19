@@ -67,6 +67,7 @@ public class MainRecipesListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        Timber.d("Binding view for item: " + mRecipes.get(i).getName());
         RecipeItemBinding binding;
         if (view == null) {
             //Inflate

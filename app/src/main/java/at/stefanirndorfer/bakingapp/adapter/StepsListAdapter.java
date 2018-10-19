@@ -1,10 +1,8 @@
 package at.stefanirndorfer.bakingapp.adapter;
 
 import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +19,12 @@ import timber.log.Timber;
 
 public class StepsListAdapter extends BaseAdapter {
 
-    private final Context mContext;
+    //private final Context mContext;
     private final StepsViewModel mViewModel;
     private List<Step> mSteps;
 
     public StepsListAdapter(Context mContext, StepsViewModel mViewModel) {
-        this.mContext = mContext;
+        //this.mContext = mContext;
         this.mViewModel = mViewModel;
         mSteps = new ArrayList<>();
         subscribeOnStepData();
@@ -36,7 +34,8 @@ public class StepsListAdapter extends BaseAdapter {
      * LiveData-subscription on the StepList in the ViewModel
      */
     private void subscribeOnStepData() {
-        mViewModel.getSteps().observe((LifecycleOwner) mContext, steps -> {
+        //mViewModel.getSteps().observe((LifecycleOwner) mContext, steps -> {
+        mViewModel.getSteps().observeForever( steps -> {
             if (steps != null && !steps.isEmpty()) {
                 Timber.d("Received list of steps from viewmodel. Length: " + steps.size());
                 setSteps(steps);
@@ -55,7 +54,7 @@ public class StepsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public Step getItem(int position) {
         return mSteps.get(position);
     }
 
@@ -68,7 +67,7 @@ public class StepsListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         StepItemBinding binding;
-
+        Timber.d("Binding view for item: " + mSteps.get(position).getShortDescription());
         if (convertView == null) {
             //Inflate
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
