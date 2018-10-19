@@ -46,13 +46,10 @@ public class StepsViewModel extends AndroidViewModel {
             //TODO: come up with a loading-ui
             dataLoading.set(true);
         }
-        mRecipeRepository.getStepsForRecipe(recipeId).observeForever(new Observer<List<Step>>() {
-            @Override
-            public void onChanged(@Nullable List<Step> steps) {
-                Timber.d("Received " + steps.size() + " steps from repository.");
-                mSteps.setValue(steps);
-                dataLoading.set(false);
-            }
+        mRecipeRepository.getStepsForRecipe(recipeId).observeForever(steps -> {
+            Timber.d("Received " + steps.size() + " steps from repository.");
+            mSteps.setValue(steps);
+            dataLoading.set(false);
         });
     }
 

@@ -39,10 +39,10 @@ public class DetailActivity extends AppCompatActivity {
 
         // we create a RecipeDetailFragment for Phone and Tablet
         RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
-        recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
         fragmentManager.beginTransaction()
                 .add(R.id.recipe_detail_container, recipeDetailFragment)
                 .commit();
+        recipeDetailFragment.setRecipeIdAndUpdateModel(recipeId);
 
 
         if (mTwoPane) {

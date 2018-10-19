@@ -36,13 +36,10 @@ public class StepsListAdapter extends BaseAdapter {
      * LiveData-subscription on the StepList in the ViewModel
      */
     private void subscribeOnStepData() {
-        mViewModel.getSteps().observe((LifecycleOwner) mContext, new Observer<List<Step>>() {
-            @Override
-            public void onChanged(@Nullable List<Step> steps) {
-                if (steps != null && !steps.isEmpty()) {
-                    Timber.d("Received list of steps from viewmodel. Length: " + steps.size());
-                    setSteps(steps);
-                }
+        mViewModel.getSteps().observe((LifecycleOwner) mContext, steps -> {
+            if (steps != null && !steps.isEmpty()) {
+                Timber.d("Received list of steps from viewmodel. Length: " + steps.size());
+                setSteps(steps);
             }
         });
     }
@@ -79,7 +76,7 @@ public class StepsListAdapter extends BaseAdapter {
         } else {
             binding = DataBindingUtil.getBinding(convertView);
         }
-        StepItemUserActionListener userActionListener = step -> mViewModel.navigateToStepFragment(step);
+        StepItemUserActionListener userActionListener = mViewModel::navigateToStepFragment;
         binding.setStep(mSteps.get(position));
 
         binding.stepShortDescriptionTv.setText(mSteps.get(position).getDescription());

@@ -49,14 +49,15 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     private void setupAdapter(View rootView) {
+        Timber.d("Setting up StepsListAdapter");
         // Get a reference to the ListView in the fragment_main_list xml layout file
         ListView listView = (ListView) rootView.findViewById(R.id.steps_list_view);
 
         // Create the adapter
-        // This adapter takes in the context and a reference of the veiwModel
+        // This adapter takes in the context and a reference of the viewModel
         StepsListAdapter adapter = new StepsListAdapter(getContext(), mViewModel);
 
-        // Set the adapter on the GridView
+        // Set the adapter on the ListView
         listView.setAdapter(adapter);
     }
 
@@ -66,12 +67,9 @@ public class RecipeDetailFragment extends Fragment {
      * @param recipeId
      */
     public void setRecipeIdAndUpdateModel(int recipeId) {
-        if (recipeId != recipeId) {
             Timber.d("Setting recipe Id to : " + recipeId);
             this.mRecipeId = recipeId;
             mViewModel.start(recipeId);
-
-        }
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {
