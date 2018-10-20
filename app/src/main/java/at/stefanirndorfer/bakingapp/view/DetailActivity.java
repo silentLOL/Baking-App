@@ -32,26 +32,29 @@ public class DetailActivity extends AppCompatActivity {
 
         //TODO: rethink back-navigation with the individual fragments
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
-        // find out if we run on a Tablet or a Phone
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        // we create a RecipeDetailFragment for Phone and Tablet
-        RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
-        fragmentManager.beginTransaction()
-                .add(R.id.detail_fragment_container, recipeDetailFragment)
-                .commit();
+        if (savedInstanceState == null) {
 
 
-        if (mTwoPane) {
-            IngredientsFragment ingredientsFragment = new IngredientsFragment();
+            // find out if we run on a Tablet or a Phone
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // we create a RecipeDetailFragment for Phone and Tablet
+            RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.ingredients_container, ingredientsFragment)
+                    .add(R.id.detail_fragment_container, recipeDetailFragment)
                     .commit();
-        }
 
+
+            if (mTwoPane) {
+                IngredientsFragment ingredientsFragment = new IngredientsFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.ingredients_container, ingredientsFragment)
+                        .commit();
+            }
+        }
     }
 
     @Override
