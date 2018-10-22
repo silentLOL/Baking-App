@@ -19,7 +19,9 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> listener.onStepClicked(step)}">
+        android:onClick="onStepButtonClicked(step)"
+        >
+        <!-- android:onClick="@{() -> listener.onStepClicked(step)}"> -->
 
         <TextView
             android:id="@+id/step_short_description_tv"

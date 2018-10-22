@@ -9,6 +9,7 @@ import android.view.View;
 import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
+import at.stefanirndorfer.bakingapp.data.Step;
 import timber.log.Timber;
 
 public class DetailActivity extends AppCompatActivity {
@@ -68,6 +69,18 @@ public class DetailActivity extends AppCompatActivity {
 
     public void onIngredientsButtonClicked(View view) {
         showIngredientsFragment();
+    }
+    
+    public void onStepButtonClicked(Step step){
+        showStepFragment();
+    }
+
+    private void showStepFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        StepFragment stepFragment = new StepFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.detail_fragment_container, stepFragment)
+                .commit();
     }
 
     private void showIngredientsFragment() {

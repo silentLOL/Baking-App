@@ -63,5 +63,6 @@ public class StepsViewModel extends AndroidViewModel {
      */
     public void navigateToStepFragment(Step step) {
         Timber.d("User clicked on the following step: " + step.getShortDescription());
+
     }
 }
