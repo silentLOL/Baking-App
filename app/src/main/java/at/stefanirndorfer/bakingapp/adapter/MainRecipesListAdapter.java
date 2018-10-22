@@ -1,6 +1,5 @@
 package at.stefanirndorfer.bakingapp.adapter;
 
-import android.arch.lifecycle.LifecycleOwner;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.text.TextUtils;
@@ -22,12 +21,12 @@ import timber.log.Timber;
 
 public class MainRecipesListAdapter extends BaseAdapter {
 
-    private final Context mContext;
+    private final RecipeItemUserActionListener mListener;
     private final MainViewModel mViewModel;
     private List<Recipe> mRecipes;
 
-    public MainRecipesListAdapter(Context context, MainViewModel viewModel) {
-        this.mContext = context;
+    public MainRecipesListAdapter(RecipeItemUserActionListener actionListener, MainViewModel viewModel) {
+        this.mListener = actionListener;
         mViewModel = viewModel;
         mRecipes = new ArrayList<>();
         subscribeOnRecipeData();
@@ -37,7 +36,7 @@ public class MainRecipesListAdapter extends BaseAdapter {
      * LiveData-subscription on the RecipeData in the ViewModel
      */
     private void subscribeOnRecipeData() {
-        mViewModel.getRecipesLiveData().observe((LifecycleOwner) mContext, recipes -> {
+        mViewModel.getRecipesLiveData().observeForever(recipes -> {
             if (recipes != null && !recipes.isEmpty()) {
                 Timber.d("received list of recipes from viewmodel. Length: " + recipes.size());
                 setRecipes(recipes);
@@ -76,7 +75,7 @@ public class MainRecipesListAdapter extends BaseAdapter {
         } else {
             binding = DataBindingUtil.getBinding(view);
         }
-        RecipeItemUserActionListener userActionListener = recipe -> mViewModel.navigateToDetailScreen(recipe);
+        RecipeItemUserActionListener userActionListener = recipe -> mListener.onRecipeClicked(recipe);
         binding.setRecipe(mRecipes.get(i));
 
         //fetch image resource if existing

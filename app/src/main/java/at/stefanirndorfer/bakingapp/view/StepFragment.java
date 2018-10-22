@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import java.util.Objects;
 
+import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.databinding.FragmentStepBinding;
 import at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
@@ -21,6 +22,7 @@ public class StepFragment extends Fragment {
     private int mRecipeId;
     FragmentStepBinding mBinding;
     private StepsViewModel mViewModel;
+    private Step mStep;
 
     @Nullable
     @Override
@@ -33,7 +35,7 @@ public class StepFragment extends Fragment {
         Bundle extras = getActivity().getIntent().getExtras();
         int recipeId = (int) extras.get(DetailActivity.RECIPE_ID_EXTRA);
         mViewModel.start(recipeId);
-
+        mBinding.setStep(mStep);
         return mBinding.getRoot();
     }
 
@@ -48,5 +50,9 @@ public class StepFragment extends Fragment {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
         StepsViewModel viewModel = ViewModelProviders.of(activity, factory).get(StepsViewModel.class);
         return viewModel;
+    }
+
+    public void setStep(Step step) {
+        this.mStep = step;
     }
 }

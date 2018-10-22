@@ -2,6 +2,7 @@ package at.stefanirndorfer.bakingapp.view;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -11,11 +12,12 @@ import java.util.List;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Recipe;
+import at.stefanirndorfer.bakingapp.view.input.RecipeItemUserActionListener;
 import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecipeItemUserActionListener {
 
     private MainViewModel mViewModel;
 
@@ -73,5 +75,22 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         Timber.d("onDestroy");
         mViewModel.getRecipesLiveData().removeObservers(this);
+    }
+
+    @Override
+    public void onRecipeClicked(Recipe recipe) {
+        navigateToDetailScreen(recipe);
+    }
+
+    /**
+     * Navigates to the DetailActivity
+     * and puts the recipes id as extra
+     * @param recipe
+     */
+    public void navigateToDetailScreen(Recipe recipe) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
+        intent.putExtra(DetailActivity.RECIPE_NAME_EXTRA, recipe.getName());
+        startActivity(intent);
     }
 }

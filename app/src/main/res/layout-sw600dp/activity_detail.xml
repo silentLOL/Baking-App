@@ -15,13 +15,7 @@
 
         <!-- containers for ingredients and steps -->
         <FrameLayout
-            android:id="@+id/ingredients_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerInside" />
-
-        <FrameLayout
-            android:id="@+id/steps_container"
+            android:id="@+id/right_pane_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerInside" />

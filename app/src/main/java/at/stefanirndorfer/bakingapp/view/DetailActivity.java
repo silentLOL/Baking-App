@@ -10,9 +10,10 @@ import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Step;
+import at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener;
 import timber.log.Timber;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements StepItemUserActionListener {
 
     public static final String RECIPE_ID_EXTRA = "recipe_id";
     public static final String RECIPE_NAME_EXTRA = "recipe_name_extra";
@@ -42,17 +43,15 @@ public class DetailActivity extends AppCompatActivity {
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
-            // we create a RecipeDetailFragment for Phone and Tablet
-            RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.detail_fragment_container, recipeDetailFragment)
-                    .commit();
-
-
             if (mTwoPane) {
                 IngredientsFragment ingredientsFragment = new IngredientsFragment();
                 fragmentManager.beginTransaction()
-                        .add(R.id.ingredients_container, ingredientsFragment)
+                        .add(R.id.right_pane_container, ingredientsFragment)
+                        .commit();
+            } else {
+                RecipeDetailFragment recipeDetailFragment = new RecipeDetailFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.detail_fragment_container, recipeDetailFragment)
                         .commit();
             }
         }
@@ -70,24 +69,40 @@ public class DetailActivity extends AppCompatActivity {
     public void onIngredientsButtonClicked(View view) {
         showIngredientsFragment();
     }
-    
-    public void onStepButtonClicked(Step step){
-        showStepFragment();
-    }
 
-    private void showStepFragment() {
+
+    private void showStepFragment(Step step) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         StepFragment stepFragment = new StepFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.detail_fragment_container, stepFragment)
-                .commit();
+        stepFragment.setStep(step);
+        if (mTwoPane) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.right_pane_container, stepFragment)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detail_fragment_container, stepFragment)
+                    .commit();
+        }
     }
 
     private void showIngredientsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         IngredientsFragment ingredientsFragment = new IngredientsFragment();
-        fragmentManager.beginTransaction()
-                .replace(R.id.detail_fragment_container, ingredientsFragment)
-                .commit();
+        if (mTwoPane) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.right_pane_container, ingredientsFragment)
+                    .commit();
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detail_fragment_container, ingredientsFragment)
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onStepClicked(Step step) {
+        Timber.d("Clicked on step: " + step.getShortDescription());
+        showStepFragment(step);
     }
 }

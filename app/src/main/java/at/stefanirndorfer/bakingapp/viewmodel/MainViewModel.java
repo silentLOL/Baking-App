@@ -65,15 +65,4 @@ public class MainViewModel extends AndroidViewModel {
         return mRecipesLiveData;
     }
 
-    /**
-     * Navigates to the DetailActivity
-     * and puts the recipes id as extra
-     * @param recipe
-     */
-    public void navigateToDetailScreen(Recipe recipe) {
-        Intent intent = new Intent(mContext, DetailActivity.class);
-        intent.putExtra(RECIPE_ID_EXTRA, recipe.getId());
-        intent.putExtra(RECIPE_NAME_EXTRA, recipe.getName());
-        mContext.startActivity(intent);
-    }
 }

@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel" />
+
+        <variable
+            name="step"
+            type="at.stefanirndorfer.bakingapp.data.Step" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -11,15 +22,17 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/step_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/title_text_view_placeholder_txt" />
-
-            <TextView
                 android:id="@+id/step_short_description_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{step.shortDescription}"
+                tools:text="@string/title_text_view_placeholder_txt" />
+
+            <TextView
+                android:id="@+id/step_description_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{step.description}"
                 tools:text="@string/step_short_description_text_view_placeholder_txt" />
 
 

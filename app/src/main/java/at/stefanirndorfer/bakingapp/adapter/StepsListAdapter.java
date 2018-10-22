@@ -18,9 +18,11 @@ import timber.log.Timber;
 public class StepsListAdapter extends BaseAdapter {
 
     private final StepsViewModel mViewModel;
+    private final StepItemUserActionListener mListener;
     private List<Step> mSteps;
 
-    public StepsListAdapter(StepsViewModel mViewModel) {
+    public StepsListAdapter(StepItemUserActionListener listener, StepsViewModel mViewModel) {
+        this.mListener = listener;
         this.mViewModel = mViewModel;
         mSteps = new ArrayList<>();
         subscribeOnStepData();
@@ -70,7 +72,7 @@ public class StepsListAdapter extends BaseAdapter {
         } else {
             binding = DataBindingUtil.getBinding(convertView);
         }
-        StepItemUserActionListener userActionListener = mViewModel::navigateToStepFragment;
+        StepItemUserActionListener userActionListener = mListener::onStepClicked;
         binding.setStep(mSteps.get(position));
 
         binding.stepShortDescriptionTv.setText(mSteps.get(position).getDescription());

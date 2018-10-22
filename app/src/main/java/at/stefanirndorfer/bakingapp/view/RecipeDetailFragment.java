@@ -1,6 +1,7 @@
 package at.stefanirndorfer.bakingapp.view;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,7 @@ import java.util.Objects;
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.StepsListAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentRecipeDetailBinding;
+import at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener;
 import at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
@@ -29,6 +31,7 @@ public class RecipeDetailFragment extends Fragment {
     private int mRecipeId;
     FragmentRecipeDetailBinding mFragmentBinding;
     private StepsViewModel mViewModel;
+    private StepItemUserActionListener mListener;
 
     @Nullable
     @Override
@@ -51,6 +54,18 @@ public class RecipeDetailFragment extends Fragment {
         setupAdapter(mFragmentBinding.getRoot());
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (StepItemUserActionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement StepItemUserActionListener");
+        }
+
+    }
+
     private void setupAdapter(View rootView) {
         Timber.d("Setting up StepsListAdapter");
         // Get a reference to the ListView in the respective xml layout file
@@ -58,7 +73,7 @@ public class RecipeDetailFragment extends Fragment {
 
         // Create the adapter
         // This adapter takes in the context and a reference of the viewModel
-        StepsListAdapter adapter = new StepsListAdapter(mViewModel);
+        StepsListAdapter adapter = new StepsListAdapter(mListener, mViewModel);
 
         // Set the adapter on the ListView
         listView.setAdapter(adapter);
