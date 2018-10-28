@@ -35,12 +35,19 @@ dependencies {
     implementation "com.android.support.constraint:constraint-layout:$rootProject.constraintLayoutVersion"
     implementation "com.google.guava:guava:$rootProject.guavaVersion"
 
+    // exoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:$rootProject.exoPlayerVersion"
+
     // picasso
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
     implementation "com.jakewharton.picasso:picasso2-okhttp3-downloader:$rootProject.picassoDownloaderVersion"
 
     // timber
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+
+    // butter knife
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion"
