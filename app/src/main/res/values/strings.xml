@@ -10,4 +10,5 @@
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
     <string name="content_description_widget_default_image">Placeholder Image for the Baking App Widget</string>
+    <string name="fake_widget_title">Widget Title</string>
 </resources>
