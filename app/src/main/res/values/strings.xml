@@ -7,4 +7,7 @@
     <string name="title_text_view_placeholder_txt">Step Title</string>
     <string name="step_short_description_text_view_placeholder_txt">Short description of this step</string>
     <string name="ingredients_button_label">Ingredients</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="content_description_widget_default_image">Placeholder Image for the Baking App Widget</string>
 </resources>
