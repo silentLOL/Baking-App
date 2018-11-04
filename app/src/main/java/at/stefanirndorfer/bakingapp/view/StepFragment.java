@@ -159,7 +159,9 @@ public class StepFragment extends Fragment implements Player.EventListener {
         super.onDestroyView();
         mViewModel.getSteps().removeObservers(this);
         releasePlayer();
-        mMediaSession.setActive(false);
+        if (mMediaSession != null) {
+            mMediaSession.setActive(false);
+        }
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {
