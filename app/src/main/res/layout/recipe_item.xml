@@ -29,7 +29,6 @@
         android:layout_marginLeft="@dimen/mtrl_card_spacing"
         android:layout_marginTop="@dimen/mtrl_card_spacing"
         android:layout_marginRight="@dimen/mtrl_card_spacing"
-        android:minHeight="200dp"
         android:onClick="@{() -> listener.onRecipeClicked(recipe)}">
 
         <!-- Card contents. -->

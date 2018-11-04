@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         style="@style/Base.TextAppearance.AppCompat.Widget.ActionBar.Title"
         tool:text="@string/fake_widget_title" />
 

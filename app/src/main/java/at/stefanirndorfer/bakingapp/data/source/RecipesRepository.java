@@ -300,7 +300,7 @@ public class RecipesRepository implements RecipesDataSource {
     public MutableLiveData<List<Step>> getStepsForRecipe(int recipeId) {
         final MutableLiveData<List<Step>> stepsLiveData = new MutableLiveData<>();
         String key = Integer.toString(recipeId);
-        if (mCachedRecipes.containsKey(key)) {
+        if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
             List<Step> steps = mCachedRecipes.get(key).getSteps();
             if (steps != null && !steps.isEmpty()) {
                 stepsLiveData.postValue(steps);
