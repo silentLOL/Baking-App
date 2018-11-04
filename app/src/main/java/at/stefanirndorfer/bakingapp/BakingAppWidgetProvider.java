@@ -27,17 +27,21 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         // Construct the RemoteViews object
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
-        Intent onclickIntent = new Intent(context, DetailActivity.class);
-        onclickIntent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, onclickIntent, 0);
 
         //views.setOnClickPendingIntent(R.id.widget_list_lv, pendingIntent);
         views.setTextViewText(R.id.widget_title_tv, recipe.getName());
+
+        // Set the PlantDetailActivity intent to launch when clicked
+        Intent onclickIntent = new Intent(context, DetailActivity.class);
+        onclickIntent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
+        PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, onclickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        views.setPendingIntentTemplate(R.id.widget_list_lv, appPendingIntent);
 
         // list view
         Intent intent = new Intent(context, ListWidgetService.class);
         views.setRemoteAdapter(R.id.widget_list_lv, intent);
 
+        // handle empty list
         views.setEmptyView(R.id.widget_list_lv, R.id.empty_view);
 
 
