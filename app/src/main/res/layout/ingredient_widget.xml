@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="8dp"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/loeffelchen_widget_iv"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/loeffelchen" />
+
+    <TextView
+        android:id="@+id/quantity_widget_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        tools:text="2" />
+
+    <TextView
+        android:id="@+id/measure_widget_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="spoons" />
+
+    <TextView
+        android:id="@+id/ingredient_name_widget_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        tools:text="Slime of a snail" />
+
+
+</LinearLayout>

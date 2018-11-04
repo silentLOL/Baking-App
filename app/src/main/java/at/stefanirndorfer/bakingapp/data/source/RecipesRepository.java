@@ -200,7 +200,7 @@ public class RecipesRepository implements RecipesDataSource {
         final MutableLiveData<Recipe> detailedRecipe = new MutableLiveData<>();
         Recipe resultingRecipe;
         String key = Integer.toString(recipeId);
-        if (mCachedRecipes.containsKey(key)) {
+        if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
             resultingRecipe = mCachedRecipes.get(key);
             Timber.d("Found recipe with id " + recipeId + "in the cached recipes");
             supplementSteps(recipeId, detailedRecipe, resultingRecipe, key);
@@ -209,6 +209,8 @@ public class RecipesRepository implements RecipesDataSource {
             if (resultingRecipe.getIngredients() != null && resultingRecipe.getSteps() != null) {
                 detailedRecipe.postValue(resultingRecipe);
             }
+        } else {
+            // TODO
         }
         return detailedRecipe;
     }
@@ -219,7 +221,7 @@ public class RecipesRepository implements RecipesDataSource {
             mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(steps -> {
                 resultingRecipe.setSteps(steps);
                 if (steps != null && !steps.isEmpty()) {
-                    saveReplaceRecipe(resultingRecipe, key);
+                    cacheReplaceRecipe(resultingRecipe, key);
                 }
                 detailedRecipe.postValue(resultingRecipe);
             });
@@ -232,14 +234,14 @@ public class RecipesRepository implements RecipesDataSource {
             mRecipesLocalDataSource.getIngredientsForRecipe(recipeId).observeForever(ingredients -> {
                 resultingRecipe.setIngredients(ingredients);
                 if (ingredients != null && !ingredients.isEmpty()) {
-                    saveReplaceRecipe(resultingRecipe, key);
+                    cacheReplaceRecipe(resultingRecipe, key);
                 }
                 detailedRecipe.postValue(resultingRecipe);
             });
         }
     }
 
-    private void saveReplaceRecipe(Recipe resultingRecipe, String key) {
+    private void cacheReplaceRecipe(Recipe resultingRecipe, String key) {
         synchronized (lock) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 mCachedRecipes.replace(key, resultingRecipe);
@@ -253,7 +255,30 @@ public class RecipesRepository implements RecipesDataSource {
 
     @Override
     public MutableLiveData<Recipe> getRecipe(int recipeId) {
-        return null;
+        final MutableLiveData<Recipe> recipeLiveData = new MutableLiveData<>();
+        String key = Integer.toString(recipeId);
+        if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
+            Timber.d("Found recipe with id " + recipeId + "in the cached recipes");
+            recipeLiveData.postValue(mCachedRecipes.get(key));
+        } else {
+            Timber.d("Requested recipe with id :" + recipeId + " was not cached");
+            mRecipesLocalDataSource.getRecipe(recipeId).observeForever(new Observer<Recipe>() {
+                @Override
+                public void onChanged(@Nullable Recipe recipe) {
+                    if (recipe == null) {
+                        Timber.e("got null object form database when requesting recipe by id: " + recipeId);
+                    } else {
+                        Timber.d("recieved recipe object from database");
+                        synchronized (lock) {
+                            mCachedRecipes.put(key, recipe);
+                        }
+                        recipeLiveData.postValue(recipe);
+                    }
+                }
+            });
+        }
+
+        return recipeLiveData;
     }
 
     @Override

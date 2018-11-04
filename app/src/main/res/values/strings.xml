@@ -11,4 +11,7 @@
     <string name="add_widget">Add widget</string>
     <string name="content_description_widget_default_image">Placeholder Image for the Baking App Widget</string>
     <string name="fake_widget_title">Widget Title</string>
+    <string name="empty_view_text">No Data available</string>
+    <string name="last_viewed_recipe_id_key">at.stefanirndorfer.bakingapp.lastVisitedRecipeId</string>
+    <string name="last_viewed_recipe_id_file_name">at.stefanirndorfer.bakingapp.sharedprefsLastSeenRecipeFile</string>
 </resources>

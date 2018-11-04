@@ -1,32 +1,45 @@
 package at.stefanirndorfer.bakingapp;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import at.stefanirndorfer.bakingapp.data.Recipe;
-import at.stefanirndorfer.bakingapp.view.MainActivity;
+import at.stefanirndorfer.bakingapp.view.DetailActivity;
+import at.stefanirndorfer.bakingapp.view.remoteview.ListWidgetService;
+import timber.log.Timber;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class BakingAppWidgetProvider extends AppWidgetProvider {
 
+
     static void updateAppWidget(Context context, Recipe recipe, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
+        Timber.d("Updating AppWidget");
         // Construct the RemoteViews object
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget_provider);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_list_view);
+        Intent onclickIntent = new Intent(context, DetailActivity.class);
+        onclickIntent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, onclickIntent, 0);
 
-        views.setOnClickPendingIntent(R.id.default_image_widget_iv, pendingIntent);
+        //views.setOnClickPendingIntent(R.id.widget_list_lv, pendingIntent);
         views.setTextViewText(R.id.widget_title_tv, recipe.getName());
+
+        // list view
+        Intent intent = new Intent(context, ListWidgetService.class);
+        views.setRemoteAdapter(R.id.widget_list_lv, intent);
+
+        views.setEmptyView(R.id.widget_list_lv, R.id.empty_view);
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
@@ -53,5 +66,14 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager,
+                                          int appWidgetId, Bundle newOptions) {
+        BakingAppWidgetService.startActionUpdateWidgets(context);
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+    }
+
 }
 

@@ -7,7 +7,7 @@
     <application
         android:name=".application.BakingAppApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_toertchen"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -37,6 +37,10 @@
                 android:resource="@xml/baking_app_widget_provider_info" />
         </receiver>
         <service android:name=".BakingAppWidgetService" />
+        <service
+            android:name=".view.remoteview.ListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
 </manifest>

@@ -1,8 +1,12 @@
 package at.stefanirndorfer.bakingapp.view;
 
+import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.util.List;
 
+import at.stefanirndorfer.bakingapp.BakingAppWidgetProvider;
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.view.input.RecipeItemUserActionListener;
@@ -85,12 +90,43 @@ public class MainActivity extends AppCompatActivity implements RecipeItemUserAct
     /**
      * Navigates to the DetailActivity
      * and puts the recipes id as extra
+     *
      * @param recipe
      */
     public void navigateToDetailScreen(Recipe recipe) {
+        updateSharedPreferences(recipe.getId());
+        triggerWidgetUpdate(recipe);
         Intent intent = new Intent(this, DetailActivity.class);
         intent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
         intent.putExtra(DetailActivity.RECIPE_NAME_EXTRA, recipe.getName());
         startActivity(intent);
+    }
+
+    /**
+     * triggers a data update on the widget
+     *
+     * @param recipe
+     */
+    private void triggerWidgetUpdate(Recipe recipe) {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingAppWidgetProvider.class));
+        //Trigger data update to handle the GridView widgets and force a data refresh
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_lv);
+        //Now update all widgets
+        BakingAppWidgetProvider.updateIngredientsWidget(this, appWidgetManager, recipe, appWidgetIds);
+    }
+
+
+    /**
+     * stores the id of the recipe latest chosen by the user to the shared prefs
+     *
+     * @param id
+     */
+    private void updateSharedPreferences(Integer id) {
+        Timber.d("Storing last seen recipe id to Shared Preferences: " + id);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(getString(R.string.last_viewed_recipe_id_key), id);
+        editor.apply();
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialKeyguardLayout="@layout/baking_app_widget_provider"
-    android:initialLayout="@layout/baking_app_widget_provider"
-    android:minWidth="110dp"
+    android:initialKeyguardLayout="@layout/widget_list_view"
+    android:initialLayout="@layout/widget_list_view"
+    android:minWidth="210dp"
     android:minHeight="180dp"
     android:previewImage="@drawable/example_appwidget_preview"
     android:resizeMode="horizontal|vertical"
