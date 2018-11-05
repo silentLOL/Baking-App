@@ -200,17 +200,33 @@ public class RecipesRepository implements RecipesDataSource {
         final MutableLiveData<Recipe> detailedRecipe = new MutableLiveData<>();
         Recipe resultingRecipe;
         String key = Integer.toString(recipeId);
-        if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
-            resultingRecipe = mCachedRecipes.get(key);
-            Timber.d("Found recipe with id " + recipeId + "in the cached recipes");
-            supplementSteps(recipeId, detailedRecipe, resultingRecipe, key);
-            supplementIngredients(recipeId, detailedRecipe, resultingRecipe, key);
-
-            if (resultingRecipe.getIngredients() != null && resultingRecipe.getSteps() != null) {
-                detailedRecipe.postValue(resultingRecipe);
-            }
+        if (mCachedRecipes == null) {
+            mCachedRecipes = new HashMap<>();
+            mRecipesLocalDataSource.getRecipe(recipeId).observeForever(recipe -> {
+                if (recipe != null) {
+                    Timber.d("Found recipe with id " + recipe.getId() + "in the database");
+                    synchronized (lock) {
+                        mCachedRecipes.put(key, recipe);
+                    }
+                    supplementSteps(recipeId, detailedRecipe, recipe, key);
+                    supplementIngredients(recipeId, detailedRecipe, recipe, key);
+                }
+            });
         } else {
-            // TODO
+            if (mCachedRecipes.containsKey(key)) {
+                resultingRecipe = mCachedRecipes.get(key);
+                Timber.d("Found recipe with id " + recipeId + "in the cached recipes");
+                if (resultingRecipe.getIngredients() != null
+                        && !resultingRecipe.getIngredients().isEmpty()
+                        && resultingRecipe.getSteps() != null
+                        && !resultingRecipe.getSteps().isEmpty()) {
+                    detailedRecipe.postValue(resultingRecipe);
+                } else {
+                    supplementSteps(recipeId, detailedRecipe, resultingRecipe, key);
+                    supplementIngredients(recipeId, detailedRecipe, resultingRecipe, key);
+                }
+            }
+
         }
         return detailedRecipe;
     }
@@ -303,13 +319,21 @@ public class RecipesRepository implements RecipesDataSource {
         if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
             List<Step> steps = mCachedRecipes.get(key).getSteps();
             if (steps != null && !steps.isEmpty()) {
+                Timber.d("posting " + steps.size() + " steps from cache to liveData");
                 stepsLiveData.postValue(steps);
             } else {
                 mRecipesLocalDataSource.getStepsForRecipe(recipeId).observeForever(stepsReturningValue -> {
+
                     stepsLiveData.postValue(stepsReturningValue);
                     mCachedRecipes.get(key).setSteps(stepsReturningValue);
                 });
             }
+        } else {
+            getDetailedRecipe(recipeId).observeForever(recipe -> {
+                if (recipe != null && recipe.getSteps() != null) {
+                    stepsLiveData.postValue(recipe.getSteps());
+                }
+            });
         }
         return stepsLiveData;
     }
@@ -334,7 +358,7 @@ public class RecipesRepository implements RecipesDataSource {
     public MutableLiveData<List<Ingredient>> getIngredientsForRecipe(int recipeId) {
         final MutableLiveData<List<Ingredient>> ingredientLiveData = new MutableLiveData<>();
         String key = Integer.toString(recipeId);
-        if (mCachedRecipes.containsKey(key)) {
+        if (mCachedRecipes != null && mCachedRecipes.containsKey(key)) {
             List<Ingredient> ingredients = mCachedRecipes.get(key).getIngredients();
             if (ingredients != null && !ingredients.isEmpty()) {
                 ingredientLiveData.postValue(ingredients);
@@ -347,6 +371,12 @@ public class RecipesRepository implements RecipesDataSource {
                     }
                 });
             }
+        } else {
+            getDetailedRecipe(recipeId).observeForever(recipe -> {
+                if (recipe != null && recipe.getIngredients() != null) {
+                    ingredientLiveData.postValue(recipe.getIngredients());
+                }
+            });
         }
         return ingredientLiveData;
     }
