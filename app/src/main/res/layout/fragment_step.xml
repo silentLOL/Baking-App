@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -13,92 +14,102 @@
             type="at.stefanirndorfer.bakingapp.data.Step" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
 
-        <TextView
-            android:id="@+id/step_short_description_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="17dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@{step.shortDescription}"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-            tools:text="@string/title_text_view_placeholder_txt" />
-
-        <TextView
-            android:id="@+id/step_description_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/step_short_description_tv"
-            android:layout_alignStart="@+id/step_short_description_tv"
-            android:layout_alignLeft="@+id/step_short_description_tv"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="32dp"
-            android:text="@{step.description}"
-            tools:text="@string/step_short_description_text_view_placeholder_txt" />
-        <!-- start step media -->
-
-        <com.google.android.exoplayer2.ui.PlayerView
-            android:id="@+id/playerView"
-            android:layout_width="347dp"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/step_description_tv"
-            android:layout_alignStart="@+id/step_description_tv"
-            android:layout_alignLeft="@+id/step_description_tv"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
-            android:adjustViewBounds="true"
-            app:srcCompat="@drawable/question_mark" />
-
-        <!-- end step media -->
-
-        <!-- start next buttons -->
-        <LinearLayout
-            style="?android:attr/buttonBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/playerView"
-            android:layout_alignStart="@+id/playerView"
-            android:layout_alignLeft="@+id/playerView"
-            android:layout_alignEnd="@+id/playerView"
-            android:layout_alignRight="@+id/playerView"
-            android:layout_marginStart="35dp"
-            android:layout_marginLeft="35dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="55dp"
-            android:layout_marginRight="55dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/previous_step_bt"
-                style="?android:attr/buttonBarButtonStyle"
+            <TextView
+                android:id="@+id/step_short_description_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/previous_step_button_label" />
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:paddingRight="8dp"
+                android:text="@{step.shortDescription}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/title_text_view_placeholder_txt" />
 
-            <Button
-                android:id="@+id/next_step_bt"
-                style="?android:attr/buttonBarButtonStyle"
+
+            <TextView
+                android:id="@+id/step_description_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/next_step_button_label" />
+                android:layout_below="@+id/step_short_description_tv"
+                android:layout_marginTop="16dp"
+                android:paddingRight="16dp"
+                android:text="@{step.description}"
+                app:layout_constraintStart_toStartOf="@+id/step_short_description_tv"
+                app:layout_constraintTop_toBottomOf="@+id/step_short_description_tv"
+                tools:text="@string/step_short_description_text_view_placeholder_txt" />
+            <!-- start step media -->
 
-        </LinearLayout>
-        <!-- end next buttons -->
-    </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/main_media_frame"
+                android:layout_width="match_parent"
+                android:layout_height="298dp"
+                android:layout_marginTop="16dp"
+                android:background="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/step_description_tv">
+
+                <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+                    android:id="@+id/exoplayer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/step_description_tv" />
+
+            </FrameLayout>
+
+            <!-- end step media -->
+
+            <!-- start next buttons -->
+            <LinearLayout
+                style="?android:attr/buttonBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingRight="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/main_media_frame">
+
+                <Button
+                    android:id="@+id/previous_step_bt"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/previous_step_button_label" />
+
+                <Button
+                    android:id="@+id/next_step_bt"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/next_step_button_label" />
+
+            </LinearLayout>
+            <!-- end next buttons -->
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 </layout>

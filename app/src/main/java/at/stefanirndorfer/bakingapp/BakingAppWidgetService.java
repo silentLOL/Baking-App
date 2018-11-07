@@ -1,12 +1,14 @@
 package at.stefanirndorfer.bakingapp;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.support.annotation.Nullable;
 
 import at.stefanirndorfer.bakingapp.data.Injection;
@@ -28,7 +30,20 @@ public class BakingAppWidgetService extends IntentService {
     public static void startActionUpdateWidgets(Context context) {
         Intent intent = new Intent(context, BakingAppWidgetService.class);
         intent.setAction(ACTION_UPDATE_BAKING_APP_WIDGET);
-        context.startService(intent);
+
+        // Android O workaround part 1
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intent);
+        } else {
+            context.startService(intent);
+        }
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Android O workaround part 2
+        startForeground(1,new Notification());
     }
 
     @Override
