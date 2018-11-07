@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.prefs.Preferences;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Ingredient;
@@ -49,6 +51,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     public void onDataSetChanged() {
         Timber.d("onDataSetChanged called");
         SharedPreferences sharedPref = mContext.getSharedPreferences(mContext.getString(R.string.last_viewed_recipe_id_file_name), Context.MODE_PRIVATE);
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
         int defaultValue = mContext.getResources().getInteger(R.integer.default_last_viewed_recipe_id);
         mCurrentrecipeId = sharedPref.getInt(mContext.getString(R.string.last_viewed_recipe_id_key), defaultValue);
         Timber.d("recipeId from SharedPreferences: " + mCurrentrecipeId);

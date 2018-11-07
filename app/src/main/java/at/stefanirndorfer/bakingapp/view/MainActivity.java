@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements RecipeItemUserAct
      */
     private void updateSharedPreferences(Integer id) {
         Timber.d("Storing last seen recipe id to Shared Preferences: " + id);
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPref = getSharedPreferences(getResources().getString(R.string.last_viewed_recipe_id_file_name),Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(getString(R.string.last_viewed_recipe_id_key), id);
         editor.apply();
