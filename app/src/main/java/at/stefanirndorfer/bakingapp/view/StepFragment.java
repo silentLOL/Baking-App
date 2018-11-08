@@ -304,12 +304,16 @@ public class StepFragment extends Fragment implements Player.EventListener {
         if (mPlayerView != null && mPlayerView.getPlayer() != null) {
             mResumeWindow = mPlayerView.getPlayer().getCurrentWindowIndex();
             mResumePosition = Math.max(0, mPlayerView.getPlayer().getContentPosition());
-            mPlayerView.getPlayer().release();
+            releasePlayer();
         }
-        if (mFullScreenDialog != null)
+        if (mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
+        }
+        if (mMediaSession != null) {
+            mMediaSession.setActive(false);
+            mMediaSession = null;
+        }
     }
-
 
     /**
      * Release ExoPlayer.
@@ -328,10 +332,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
         Timber.d("onDestroy");
         mViewModel.getSteps().removeObservers(this);
         //releasePlayer();
-        if (mMediaSession != null) {
-            mMediaSession.setActive(false);
-            mMediaSession = null;
-        }
+
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {

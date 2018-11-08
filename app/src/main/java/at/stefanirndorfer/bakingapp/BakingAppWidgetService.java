@@ -2,14 +2,19 @@ package at.stefanirndorfer.bakingapp;
 
 import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
 
 import at.stefanirndorfer.bakingapp.data.Injection;
 import at.stefanirndorfer.bakingapp.data.Recipe;
@@ -43,7 +48,32 @@ public class BakingAppWidgetService extends IntentService {
     public void onCreate() {
         super.onCreate();
         // Android O workaround part 2
-        startForeground(1,new Notification());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startBakingAppForegroundService();
+        else
+            startForeground(1, new Notification());
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void startBakingAppForegroundService() {
+        Timber.d("Creating custom notification.");
+        String NOTIFICATION_CHANNEL_ID = "at.stefanirndorfer.bakingapp";
+        String channelName = "BakingApp Widget Service";
+        NotificationChannel chan = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, NotificationManager.IMPORTANCE_NONE);
+        chan.setLightColor(getApplicationContext().getColor(R.color.secondaryLightColor));
+        chan.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+        NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        assert manager != null;
+        manager.createNotificationChannel(chan);
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID);
+        Notification notification = notificationBuilder.setOngoing(true)
+                .setSmallIcon(R.drawable.loeffelchen)
+                .setContentTitle("App is running in background")
+                .setPriority(NotificationManager.IMPORTANCE_MIN)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .build();
+        startForeground(2, notification);
     }
 
     @Override
