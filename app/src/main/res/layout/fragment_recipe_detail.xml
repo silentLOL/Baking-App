@@ -9,15 +9,18 @@
     </data>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <!-- start Ingredients button -->
         <Button
             android:id="@+id/ingredients_bt"
-            android:layout_width="match_parent"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="16dp"
             android:onClick="onIngredientsButtonClicked"
             android:text="@string/ingredients_button_label" />
         <!-- end Ingredients button -->

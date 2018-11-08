@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -63,6 +64,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
     FragmentStepBinding mBinding;
     private StepsViewModel mViewModel;
     private Step mStep;
+    private List<Step> mSteps;
 
     private SimpleExoPlayer mExoPlayer;
     PlayerView mPlayerView;
@@ -109,7 +111,42 @@ public class StepFragment extends Fragment implements Player.EventListener {
             mBinding.setStep(mStep);
             initPlayer();
         }
+
+        setupButtonOnClickHanderls();
         return mBinding.getRoot();
+    }
+
+    private void setupButtonOnClickHanderls() {
+        mBinding.nextStepBt.setOnClickListener(v -> {
+            if (mSteps != null && !mSteps.isEmpty()) {
+                if (mCurrStepId < mSteps.size() - 1) {
+                    mCurrStepId++;
+                    updateStep();
+                }
+            }
+        });
+        mBinding.previousStepBt.setOnClickListener(v -> {
+            if (mSteps != null && !mSteps.isEmpty()) {
+                if (mCurrStepId > 0) {
+                    mCurrStepId--;
+                    updateStep();
+                }
+            }
+        });
+    }
+
+    private void updateStep() {
+        mStep = mSteps.get(mCurrStepId);
+        mBinding.setStep(mStep);
+        //releasePlayer();
+        //destroyMediaSession();
+        if (mExoPlayer != null) {
+            mExoPlayer.stop(true);
+            if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
+                prepareMediaSource(Uri.parse(mStep.getVideoURL()));
+            }
+        }
+        updateNavigationButtons();
     }
 
     private void initPlayer() {
@@ -134,28 +171,32 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
     private void subscribeOnStepsData() {
         mViewModel.getSteps().observe(this, new Observer<List<Step>>() {
+
             @Override
             public void onChanged(@Nullable List<Step> steps) {
                 if (steps != null && !steps.isEmpty()) {
                     mStep = steps.get(mCurrStepId);
                     mBinding.setStep(mStep);
+                    mSteps = steps;
                     initPlayer();
-                    updateNavigationButtons(steps);
+                    updateNavigationButtons();
                 }
             }
         });
     }
 
-    private void updateNavigationButtons(List<Step> steps) {
-        if (mCurrStepId == 0) {
-            mBinding.previousStepBt.setVisibility(View.INVISIBLE);
-        } else {
-            mBinding.previousStepBt.setVisibility(View.VISIBLE);
-        }
-        if (mCurrStepId == steps.size() - 1) {
-            mBinding.nextStepBt.setVisibility(View.INVISIBLE);
-        } else {
-            mBinding.nextStepBt.setVisibility(View.VISIBLE);
+    private void updateNavigationButtons() {
+        if (mSteps != null && !mSteps.isEmpty()) {
+            if (mCurrStepId == 0) {
+                mBinding.previousStepBt.setVisibility(View.INVISIBLE);
+            } else {
+                mBinding.previousStepBt.setVisibility(View.VISIBLE);
+            }
+            if (mCurrStepId == mSteps.size() - 1) {
+                mBinding.nextStepBt.setVisibility(View.INVISIBLE);
+            } else {
+                mBinding.nextStepBt.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -182,20 +223,23 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
 
             mExoPlayer.addListener(this);
-            // Prepare the MediaSource.
-            String userAgent = Util.getUserAgent(this.getActivity(), "Baking App");
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(
-                    this.getActivity(), userAgent)).createMediaSource(uri);
+            prepareMediaSource(uri);
 
             boolean haveResumePosition = mResumeWindow != C.INDEX_UNSET;
-            mExoPlayer.prepare(mediaSource);
-            mExoPlayer.setPlayWhenReady(true);
-
             if (haveResumePosition) {
                 Timber.d("Player can resume on position: " + mResumePosition);
                 mExoPlayer.seekTo(mResumeWindow, mResumePosition);
             }
         }
+    }
+
+    private void prepareMediaSource(Uri uri) {
+        String userAgent = Util.getUserAgent(this.getActivity(), "Baking App");
+        MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(
+                this.getActivity(), userAgent)).createMediaSource(uri);
+
+        mExoPlayer.prepare(mediaSource);
+        mExoPlayer.setPlayWhenReady(true);
     }
 
     /**
@@ -232,8 +276,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
             // Start the Media Session since the activity is active.
             mMediaSession.setActive(true);
         }
-
-
     }
 
     // Player Events
@@ -263,7 +305,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
     }
 
     private void openFullscreenDialog() {
-
         ((ViewGroup) mPlayerView.getParent()).removeView(mPlayerView);
         mFullScreenDialog.addContentView(mPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mFullScreenIcon.setImageDrawable(ContextCompat.getDrawable(this.getContext(), R.drawable.ic_fullscreen_skrink));
@@ -272,7 +313,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
     }
 
     private void closeFullscreenDialog() {
-
         ((ViewGroup) mPlayerView.getParent()).removeView(mPlayerView);
         mBinding.mainMediaFrame.addView(mPlayerView);
         mExoPlayerFullscreen = false;
@@ -281,7 +321,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
     }
 
     private void initFullscreenButton() {
-
         PlayerControlView controlView = mPlayerView.findViewById(R.id.exo_controller);
         mFullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         mFullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
@@ -304,11 +343,24 @@ public class StepFragment extends Fragment implements Player.EventListener {
         if (mPlayerView != null && mPlayerView.getPlayer() != null) {
             mResumeWindow = mPlayerView.getPlayer().getCurrentWindowIndex();
             mResumePosition = Math.max(0, mPlayerView.getPlayer().getContentPosition());
-            releasePlayer();
         }
         if (mFullScreenDialog != null) {
             mFullScreenDialog.dismiss();
         }
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            releasePlayer();
+        }
+    }
+
+    private void destroyMediaSession() {
         if (mMediaSession != null) {
             mMediaSession.setActive(false);
             mMediaSession = null;
@@ -330,9 +382,8 @@ public class StepFragment extends Fragment implements Player.EventListener {
     public void onDestroyView() {
         super.onDestroyView();
         Timber.d("onDestroy");
+        destroyMediaSession();
         mViewModel.getSteps().removeObservers(this);
-        //releasePlayer();
-
     }
 
     public static StepsViewModel obtainViewModel(FragmentActivity activity) {
