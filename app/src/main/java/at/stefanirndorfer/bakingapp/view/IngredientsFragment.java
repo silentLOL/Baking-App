@@ -16,6 +16,7 @@ import java.util.Objects;
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.IngredientsListAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentIngredientsBinding;
+import at.stefanirndorfer.bakingapp.view.input.FragmentNavigationListener;
 import at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
@@ -25,6 +26,7 @@ public class IngredientsFragment extends Fragment {
     private int mRecipeId;
     FragmentIngredientsBinding mFragmentBinding;
     private IngredientsViewModel mViewModel;
+
 
     @Nullable
     @Override
@@ -73,4 +75,5 @@ public class IngredientsFragment extends Fragment {
         IngredientsViewModel viewModel = ViewModelProviders.of(activity, factory).get(IngredientsViewModel.class);
         return viewModel;
     }
+
 }

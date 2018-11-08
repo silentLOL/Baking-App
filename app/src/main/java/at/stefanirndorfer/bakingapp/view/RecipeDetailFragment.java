@@ -45,6 +45,11 @@ public class RecipeDetailFragment extends Fragment {
         int recipeId = (int) extras.get(DetailActivity.RECIPE_ID_EXTRA);
         mViewModel.start(recipeId);
 
+        // hide ingredients button on tablets
+        if (getResources().getBoolean(R.bool.isTablet)){
+            mFragmentBinding.ingredientsBt.setVisibility(View.GONE);
+        }
+
         return mFragmentBinding.getRoot();
     }
 

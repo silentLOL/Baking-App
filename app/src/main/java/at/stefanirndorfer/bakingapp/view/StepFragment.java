@@ -43,6 +43,7 @@ import java.util.Objects;
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.databinding.FragmentStepBinding;
+import at.stefanirndorfer.bakingapp.view.input.FragmentNavigationListener;
 import at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
@@ -65,6 +66,8 @@ public class StepFragment extends Fragment implements Player.EventListener {
     private StepsViewModel mViewModel;
     private Step mStep;
     private List<Step> mSteps;
+
+    private FragmentNavigationListener mFragmentNavigationListener;
 
     private SimpleExoPlayer mExoPlayer;
     PlayerView mPlayerView;
@@ -100,6 +103,11 @@ public class StepFragment extends Fragment implements Player.EventListener {
         subscribeOnStepsData();
         mViewModel.start(mCurrRecipeId);
 
+        // Set ViewIngredients button invisible for Tablets
+        if (getResources().getBoolean(R.bool.isTablet)) {
+            mBinding.viewIngredientsBt.setVisibility(View.INVISIBLE);
+        }
+
         if (mPlayerView == null) {
             mPlayerView = mBinding.exoplayer;
             mPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.question_mark));
@@ -132,6 +140,10 @@ public class StepFragment extends Fragment implements Player.EventListener {
                     updateStep();
                 }
             }
+        });
+
+        mBinding.viewIngredientsBt.setOnClickListener(v -> {
+            mFragmentNavigationListener.navigateToIngredientsFragment(mCurrRecipeId);
         });
     }
 
@@ -399,6 +411,10 @@ public class StepFragment extends Fragment implements Player.EventListener {
             mCurrRecipeId = step.getRecipeId();
             this.mStep = step;
         }
+    }
+
+    public void registerFragmentNavigationListener(FragmentNavigationListener listener) {
+        mFragmentNavigationListener = listener;
     }
 
     /**

@@ -10,10 +10,11 @@ import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Step;
+import at.stefanirndorfer.bakingapp.view.input.FragmentNavigationListener;
 import at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener;
 import timber.log.Timber;
 
-public class DetailActivity extends AppCompatActivity implements StepItemUserActionListener {
+public class DetailActivity extends AppCompatActivity implements StepItemUserActionListener, FragmentNavigationListener {
 
     public static final String RECIPE_ID_EXTRA = "recipe_id";
     public static final String RECIPE_NAME_EXTRA = "recipe_name_extra";
@@ -81,6 +82,7 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
     private void showStepFragment(Step step) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         StepFragment stepFragment = new StepFragment();
+        stepFragment.registerFragmentNavigationListener(this);
         stepFragment.setStep(step);
         if (mTwoPane) {
             fragmentManager.beginTransaction()
@@ -112,5 +114,10 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
     public void onStepClicked(Step step) {
         Timber.d("Clicked on step: " + step.getShortDescription());
         showStepFragment(step);
+    }
+
+    @Override
+    public void navigateToIngredientsFragment(int recipeId) {
+        showIngredientsFragment();
     }
 }
