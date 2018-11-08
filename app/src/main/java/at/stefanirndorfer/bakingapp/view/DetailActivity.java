@@ -32,14 +32,12 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
         setTitle(recipeName);
         Timber.d("DetailActivity created with recipe id: %s", recipeId);
 
-        //TODO: rethink back-navigation with the individual fragments
         Objects.requireNonNull(this.getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        // find out if we run on a Tablet or a Phone
         mTwoPane = getResources().getBoolean(R.bool.isTablet);
 
         if (savedInstanceState == null) {
 
-
-            // find out if we run on a Tablet or a Phone
 
             FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -64,6 +62,15 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
             onBackPressed();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+            super.onBackPressed();
+        } else {
+            getSupportFragmentManager().popBackStack();
+        }
     }
 
     public void onIngredientsButtonClicked(View view) {
@@ -96,6 +103,7 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
         } else {
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_fragment_container, ingredientsFragment)
+                    .addToBackStack(ingredientsFragment.getClass().getCanonicalName())
                     .commit();
         }
     }
