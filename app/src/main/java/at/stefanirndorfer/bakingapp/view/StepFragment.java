@@ -108,12 +108,10 @@ public class StepFragment extends Fragment implements Player.EventListener {
             mBinding.viewIngredientsBt.setVisibility(View.INVISIBLE);
         }
 
-        if (mPlayerView == null) {
-            mPlayerView = mBinding.exoplayer;
-            mPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.question_mark));
-            initFullscreenDialog();
-            initFullscreenButton();
-        }
+        mPlayerView = mBinding.exoplayer;
+        mPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.question_mark));
+        initFullscreenDialog();
+        initFullscreenButton();
 
         if (mStep != null) {
             mBinding.setStep(mStep);
@@ -122,6 +120,16 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
         setupButtonOnClickHanderls();
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mStep != null) {
+            mBinding.setStep(mStep);
+            initPlayer();
+        }
     }
 
     private void setupButtonOnClickHanderls() {
