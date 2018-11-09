@@ -17,4 +17,5 @@
     <string name="view_ingredients_label">View Ingredients</string>
     <string name="ingredients_text">Ingredients</string>
     <string name="steps">Steps</string>
+    <string name="spoon_graphic">Spoon Graphic</string>
 </resources>

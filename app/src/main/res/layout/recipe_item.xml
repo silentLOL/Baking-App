@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/apk/res-auto">
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -81,17 +82,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="16dp"
                     android:text="@{recipe.getName()}"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                    tools:text="Brownies" />
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@color/secondaryLightColor" />
+                <include layout="@layout/horizontal_line" />
 
                 <TextView
                     android:id="@+id/recipe_servings_tv"
@@ -102,6 +98,7 @@
                     android:layout_marginTop="8dp"
                     android:text="@{String.valueOf(recipe.getServings()) + ` servings`}"
                     android:textAllCaps="true"
+                    tools:text="4 servings"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption" />
             </LinearLayout>
         </LinearLayout>
