@@ -101,7 +101,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
             mCurrStepId = savedInstanceState.getInt(CURR_STEP_ID);
         }
         subscribeOnStepsData();
-        mViewModel.start(mCurrRecipeId);
+
 
         // Set ViewIngredients button invisible for Tablets
         if (getResources().getBoolean(R.bool.isTablet)) {
@@ -113,10 +113,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
         initFullscreenDialog();
         initFullscreenButton();
 
-        if (mStep != null) {
-            mBinding.setStep(mStep);
-            initPlayer();
-        }
+        mBinding.setStep(mStep);
 
         setupButtonOnClickHanderls();
         return mBinding.getRoot();
@@ -125,11 +122,8 @@ public class StepFragment extends Fragment implements Player.EventListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mStep != null) {
-            mBinding.setStep(mStep);
-            initPlayer();
-        }
+        mViewModel.start(mCurrRecipeId);
+        initPlayer();
     }
 
     private void setupButtonOnClickHanderls() {
@@ -170,6 +164,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
     }
 
     private void initPlayer() {
+        Timber.d("Initializing player");
         if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
             // Initialize the Media Session.
             initializeMediaSession();
