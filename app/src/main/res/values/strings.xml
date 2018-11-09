@@ -15,4 +15,6 @@
     <string name="last_viewed_recipe_id_key">at.stefanirndorfer.bakingapp.lastVisitedRecipeId</string>
     <string name="last_viewed_recipe_id_file_name">at.stefanirndorfer.bakingapp.sharedprefsLastSeenRecipeFile</string>
     <string name="view_ingredients_label">View Ingredients</string>
+    <string name="ingredients_text">Ingredients</string>
+    <string name="steps">Steps</string>
 </resources>

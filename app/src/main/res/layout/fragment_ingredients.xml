@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
+
         <variable
             name="viewModel"
-            type="at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel">
-        </variable>
+            type="at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel"></variable>
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:text="@string/ingredients_text" />
+
         <ListView
             android:id="@+id/ingredients_list_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
             android:adjustViewBounds="true"
             android:gravity="center"
             android:horizontalSpacing="8dp"
