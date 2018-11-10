@@ -110,9 +110,18 @@ public class StepFragment extends Fragment implements Player.EventListener {
         initFullscreenButton();
 
         mBinding.setStep(mStep);
+        adaptViewIfVideoURLIsNull();
 
         setupButtonOnClickHanderls();
         return mBinding.getRoot();
+    }
+
+    private void adaptViewIfVideoURLIsNull() {
+        if (TextUtils.isEmpty(mStep.getVideoURL())){
+            mBinding.mainMediaFrame.setVisibility(View.GONE);
+        } else {
+            mBinding.mainMediaFrame.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -160,6 +169,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
             if (currStep.getId() == mCurrStepId) {
                 mStep = currStep;
                 mBinding.setStep(mStep);
+                adaptViewIfVideoURLIsNull();
                 return;
             }
         }
@@ -168,6 +178,7 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
     private void initPlayer() {
         Timber.d("Initializing player");
+
         // Initialize the Media Session.
         initializeMediaSession();
         initializePlayer(Uri.parse(mStep.getVideoURL()));
@@ -194,7 +205,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
                     Timber.d("Current Id: " + mCurrStepId);
                     Timber.d("Received Steps size: " + steps.size());
                     bindCorrectStep(steps);
-                    mBinding.setStep(mStep);
                     mSteps = steps;
                     initPlayer();
                     updateNavigationButtons();
