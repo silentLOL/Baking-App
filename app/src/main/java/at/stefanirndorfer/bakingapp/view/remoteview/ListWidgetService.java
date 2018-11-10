@@ -61,13 +61,21 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             }
             Timber.d("List of ingredients updated on widget. Size: " + ingredients.size());
             mIngredients = ingredients;
-
         });
+
+        // This is ugly. But the async live data response and the end of this method
+        // have a race condition.
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onDestroy() {
-
+        Timber.d("onDestroy");
+        RecipesRepository.destroyInstance();
     }
 
     @Override
@@ -79,6 +87,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     @Override
     public RemoteViews getViewAt(int position) {
         if (mIngredients == null || mIngredients.isEmpty()) {
+            Timber.d("Ingredients is Empty or null!");
             return null;
         }
         Ingredient ingredient = mIngredients.get(position);

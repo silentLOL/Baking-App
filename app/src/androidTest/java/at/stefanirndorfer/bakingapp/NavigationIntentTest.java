@@ -2,7 +2,6 @@ package at.stefanirndorfer.bakingapp;
 
 import android.app.Activity;
 import android.app.Instrumentation;
-import android.content.Intent;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.espresso.matcher.ViewMatchers;
@@ -20,10 +19,8 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.Intents.intended;
 import static android.support.test.espresso.intent.Intents.intending;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.isInternal;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
 
@@ -40,6 +37,10 @@ public class NavigationIntentTest {
         intending(not(isInternal())).respondWith(new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
     }
 
+    /**
+     * TODO: This test fails if ran in a batch with other tests.
+     * succeeds when performed solitary.
+     */
     @Test
     public void navigateToDetailView() {
         onView(ViewMatchers.withId(R.id.recycler_view_recipes_list_rv))
