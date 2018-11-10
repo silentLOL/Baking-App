@@ -7,15 +7,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.util.Objects;
 
 import at.stefanirndorfer.bakingapp.R;
-import at.stefanirndorfer.bakingapp.adapter.StepsListAdapter;
+import at.stefanirndorfer.bakingapp.adapter.StepsRecyclerViewAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentRecipeDetailBinding;
 import at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener;
 import at.stefanirndorfer.bakingapp.viewmodel.StepsViewModel;
@@ -32,6 +33,9 @@ public class RecipeDetailFragment extends Fragment {
     FragmentRecipeDetailBinding mFragmentBinding;
     private StepsViewModel mViewModel;
     private StepItemUserActionListener mListener;
+    private RecyclerView mRecyclerViewSteps;
+    private LinearLayoutManager mLinearLayoutManagerSteps;
+    private StepsRecyclerViewAdapter mStepsRecyclerViewAdapter;
 
     @Nullable
     @Override
@@ -56,7 +60,17 @@ public class RecipeDetailFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupAdapter(mFragmentBinding.getRoot());
+        setupStepRecyclerViewAdapter();
+    }
+
+    private void setupStepRecyclerViewAdapter() {
+        Timber.d( "Setting up TrailerRecyclerView");
+        mRecyclerViewSteps = mFragmentBinding.recyclerViewStepsRv;
+        mLinearLayoutManagerSteps = new LinearLayoutManager(this.getActivity());
+        mRecyclerViewSteps.setLayoutManager(mLinearLayoutManagerSteps);
+        mRecyclerViewSteps.setHasFixedSize(true);
+        mStepsRecyclerViewAdapter = new StepsRecyclerViewAdapter(mViewModel, mListener, this.getActivity().getApplication());
+        mRecyclerViewSteps.setAdapter(mStepsRecyclerViewAdapter);
     }
 
     @Override
@@ -68,21 +82,8 @@ public class RecipeDetailFragment extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement StepItemUserActionListener");
         }
-
     }
 
-    private void setupAdapter(View rootView) {
-        Timber.d("Setting up StepsListAdapter");
-        // Get a reference to the ListView in the respective xml layout file
-        ListView listView = (ListView) rootView.findViewById(R.id.steps_list_view);
-
-        // Create the adapter
-        // This adapter takes in the context and a reference of the viewModel
-        StepsListAdapter adapter = new StepsListAdapter(getActivity().getApplication(), mListener, mViewModel);
-
-        // Set the adapter on the ListView
-        listView.setAdapter(adapter);
-    }
 
 
     @Override
