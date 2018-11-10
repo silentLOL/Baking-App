@@ -129,16 +129,18 @@ public class StepFragment extends Fragment implements Player.EventListener {
     private void setupButtonOnClickHanderls() {
         mBinding.nextStepBt.setOnClickListener(v -> {
             if (mSteps != null && !mSteps.isEmpty()) {
-                if (mCurrStepId < mSteps.size() - 1) {
-                    mCurrStepId++;
+                int i = getIndexOfCurrentStep();
+                if (i < mSteps.size() - 1) {
+                    mCurrStepId = mSteps.get(i + 1).getId();
                     updateStep();
                 }
             }
         });
         mBinding.previousStepBt.setOnClickListener(v -> {
             if (mSteps != null && !mSteps.isEmpty()) {
-                if (mCurrStepId > 0) {
-                    mCurrStepId--;
+                int i = getIndexOfCurrentStep();
+                if (1 > 0) {
+                    mCurrStepId = mSteps.get(i - 1).getId();
                     updateStep();
                 }
             }
@@ -149,11 +151,17 @@ public class StepFragment extends Fragment implements Player.EventListener {
         });
     }
 
+    private int getIndexOfCurrentStep() {
+        for (int i = 0; i < mSteps.size(); i++) {
+            if (mSteps.get(i).getId() == mCurrStepId) {
+                return i;
+            }
+        }
+        throw new IllegalStateException("Current StepId does not exist.");
+    }
+
     private void updateStep() {
-        mStep = mSteps.get(mCurrStepId);
-        mBinding.setStep(mStep);
-        //releasePlayer();
-        //destroyMediaSession();
+        bindCorrectStep(mSteps);
         if (mExoPlayer != null) {
             mExoPlayer.stop(true);
             if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
@@ -161,6 +169,18 @@ public class StepFragment extends Fragment implements Player.EventListener {
             }
         }
         updateNavigationButtons();
+    }
+
+    private void bindCorrectStep(List<Step> mSteps) {
+        for (Step currStep :
+                mSteps) {
+            if (currStep.getId() == mCurrStepId) {
+                mStep = currStep;
+                mBinding.setStep(mStep);
+                return;
+            }
+        }
+        throw new IllegalStateException("Current StepId cannot be found in list fetched from repository.");
     }
 
     private void initPlayer() {
@@ -190,7 +210,9 @@ public class StepFragment extends Fragment implements Player.EventListener {
             @Override
             public void onChanged(@Nullable List<Step> steps) {
                 if (steps != null && !steps.isEmpty()) {
-                    mStep = steps.get(mCurrStepId);
+                    Timber.d("Current Id: " + mCurrStepId);
+                    Timber.d("Received Steps size: " + steps.size());
+                    bindCorrectStep(steps);
                     mBinding.setStep(mStep);
                     mSteps = steps;
                     initPlayer();

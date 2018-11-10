@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,18 +17,43 @@
             type="at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()->listener.onStepClicked(step)}">
+        android:onClick="@{()->listener.onStepClicked(step)}"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/step_short_description_tv"
+        <ImageView
+            android:id="@+id/step_image_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/placeholder_img_content_description"
+            android:scaleType="centerCrop"
+            android:src="@drawable/toertchen" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{step.getShortDescription()}" />
+            android:orientation="vertical">
 
-    </FrameLayout>
+            <TextView
+                android:id="@+id/step_short_description_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="22dp"
+                android:layout_marginBottom="15dp"
+                android:text="@{step.getShortDescription()}"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                tools:text="Go ahead and stir it." />
 
+            <include layout="@layout/horizontal_line" />
+        </LinearLayout>
 
+    </LinearLayout>
 </layout>
