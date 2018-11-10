@@ -6,17 +6,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import java.util.Objects;
 
-import at.stefanirndorfer.bakingapp.R;
-import at.stefanirndorfer.bakingapp.adapter.IngredientsListAdapter;
+import at.stefanirndorfer.bakingapp.adapter.IngredientsRecyclerViewAdapter;
 import at.stefanirndorfer.bakingapp.databinding.FragmentIngredientsBinding;
-import at.stefanirndorfer.bakingapp.view.input.FragmentNavigationListener;
 import at.stefanirndorfer.bakingapp.viewmodel.IngredientsViewModel;
 import at.stefanirndorfer.bakingapp.viewmodel.ViewModelFactory;
 import timber.log.Timber;
@@ -26,6 +25,9 @@ public class IngredientsFragment extends Fragment {
     private int mRecipeId;
     FragmentIngredientsBinding mFragmentBinding;
     private IngredientsViewModel mViewModel;
+    private RecyclerView mRecyclerViewIngredients;
+    private LinearLayoutManager mLinearLayoutManagerIngredients;
+    private IngredientsRecyclerViewAdapter mIngredientsRecyclerViewAdapter;
 
 
     @Nullable
@@ -46,21 +48,20 @@ public class IngredientsFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupAdapter(mFragmentBinding.getRoot());
+        setupIngredientRecyclerViewAdapter();
     }
 
-    private void setupAdapter(View rootView) {
-        Timber.d("Setting up IngredientsListAdapter");
-        // Get a reference to the ListView in the xml respective layout file
-        ListView listView = (ListView) rootView.findViewById(R.id.ingredients_list_view);
-
-        // Create the adapter
-        // This adapter takes in the context and a reference of the veiwModel
-        IngredientsListAdapter adapter = new IngredientsListAdapter(mViewModel);
-
-        // Set the adapter on the ListView
-        listView.setAdapter(adapter);
+    private void setupIngredientRecyclerViewAdapter() {
+        Timber.d( "Setting up TrailerRecyclerView");
+        mRecyclerViewIngredients = mFragmentBinding.recyclerViewIngredientsRv;
+        mLinearLayoutManagerIngredients = new LinearLayoutManager(this.getActivity());
+        mRecyclerViewIngredients.setLayoutManager(mLinearLayoutManagerIngredients);
+        mRecyclerViewIngredients.setHasFixedSize(true);
+        mIngredientsRecyclerViewAdapter = new IngredientsRecyclerViewAdapter(mViewModel);
+        mRecyclerViewIngredients.setAdapter(mIngredientsRecyclerViewAdapter);
     }
+
+
 
     @Override
     public void onDestroyView() {
