@@ -117,10 +117,12 @@ public class StepFragment extends Fragment implements Player.EventListener {
     }
 
     private void adaptViewIfVideoURLIsNull() {
-        if (TextUtils.isEmpty(mStep.getVideoURL())){
-            mBinding.mainMediaFrame.setVisibility(View.GONE);
-        } else {
-            mBinding.mainMediaFrame.setVisibility(View.VISIBLE);
+        if (mStep != null) {
+            if (TextUtils.isEmpty(mStep.getVideoURL())) {
+                mBinding.mainMediaFrame.setVisibility(View.GONE);
+            } else {
+                mBinding.mainMediaFrame.setVisibility(View.VISIBLE);
+            }
         }
     }
 
