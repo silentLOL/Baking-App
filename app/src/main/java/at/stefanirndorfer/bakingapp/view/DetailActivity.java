@@ -82,7 +82,6 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
     private void showStepFragment(Step step) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         StepFragment stepFragment = new StepFragment();
-        stepFragment.registerFragmentNavigationListener(this);
         stepFragment.setStep(step);
         if (mTwoPane) {
             fragmentManager.beginTransaction()

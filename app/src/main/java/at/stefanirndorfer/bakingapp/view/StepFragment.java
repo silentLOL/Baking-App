@@ -3,6 +3,7 @@ package at.stefanirndorfer.bakingapp.view;
 import android.app.Dialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -121,29 +122,16 @@ public class StepFragment extends Fragment implements Player.EventListener {
         initPlayer();
     }
 
-    private void setupButtonOnClickHanderls() {
-        mBinding.nextStepBt.setOnClickListener(v -> {
-            if (mSteps != null && !mSteps.isEmpty()) {
-                int i = getIndexOfCurrentStep();
-                if (i < mSteps.size() - 1) {
-                    mCurrStepId = mSteps.get(i + 1).getId();
-                    updateStep();
-                }
-            }
-        });
-        mBinding.previousStepBt.setOnClickListener(v -> {
-            if (mSteps != null && !mSteps.isEmpty()) {
-                int i = getIndexOfCurrentStep();
-                if (1 > 0) {
-                    mCurrStepId = mSteps.get(i - 1).getId();
-                    updateStep();
-                }
-            }
-        });
 
-        mBinding.viewIngredientsBt.setOnClickListener(v -> {
-            mFragmentNavigationListener.navigateToIngredientsFragment(mCurrRecipeId);
-        });
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mFragmentNavigationListener = (FragmentNavigationListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement FragmentNavigationListener");
+        }
     }
 
     private int getIndexOfCurrentStep() {
@@ -180,12 +168,10 @@ public class StepFragment extends Fragment implements Player.EventListener {
 
     private void initPlayer() {
         Timber.d("Initializing player");
-        if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
-            // Initialize the Media Session.
-            initializeMediaSession();
-            initializePlayer(Uri.parse(mStep.getVideoURL()));
-            setFullscreenIfLandscape();
-        }
+        // Initialize the Media Session.
+        initializeMediaSession();
+        initializePlayer(Uri.parse(mStep.getVideoURL()));
+        setFullscreenIfLandscape();
     }
 
     /**
@@ -433,8 +419,30 @@ public class StepFragment extends Fragment implements Player.EventListener {
         }
     }
 
-    public void registerFragmentNavigationListener(FragmentNavigationListener listener) {
-        mFragmentNavigationListener = listener;
+
+    private void setupButtonOnClickHanderls() {
+        mBinding.nextStepBt.setOnClickListener(v -> {
+            if (mSteps != null && !mSteps.isEmpty()) {
+                int i = getIndexOfCurrentStep();
+                if (i < mSteps.size() - 1) {
+                    mCurrStepId = mSteps.get(i + 1).getId();
+                    updateStep();
+                }
+            }
+        });
+        mBinding.previousStepBt.setOnClickListener(v -> {
+            if (mSteps != null && !mSteps.isEmpty()) {
+                int i = getIndexOfCurrentStep();
+                if (1 > 0) {
+                    mCurrStepId = mSteps.get(i - 1).getId();
+                    updateStep();
+                }
+            }
+        });
+
+        mBinding.viewIngredientsBt.setOnClickListener(v -> {
+            mFragmentNavigationListener.navigateToIngredientsFragment(mCurrRecipeId);
+        });
     }
 
     /**
