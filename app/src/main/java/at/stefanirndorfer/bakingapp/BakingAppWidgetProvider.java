@@ -34,6 +34,7 @@ public class BakingAppWidgetProvider extends AppWidgetProvider {
         // Set the PlantDetailActivity intent to launch when clicked
         Intent onclickIntent = new Intent(context, DetailActivity.class);
         onclickIntent.putExtra(DetailActivity.RECIPE_ID_EXTRA, recipe.getId());
+        onclickIntent.putExtra(DetailActivity.RECIPE_NAME_EXTRA, recipe.getName());
         PendingIntent appPendingIntent = PendingIntent.getActivity(context, 0, onclickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         views.setPendingIntentTemplate(R.id.widget_list_lv, appPendingIntent);
 

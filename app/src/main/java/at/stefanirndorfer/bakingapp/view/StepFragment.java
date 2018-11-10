@@ -103,11 +103,6 @@ public class StepFragment extends Fragment implements Player.EventListener {
         subscribeOnStepsData();
 
 
-        // Set ViewIngredients button invisible for Tablets
-        if (getResources().getBoolean(R.bool.isTablet)) {
-            mBinding.viewIngredientsBt.setVisibility(View.INVISIBLE);
-        }
-
         mPlayerView = mBinding.exoplayer;
         mPlayerView.setDefaultArtwork(getResources().getDrawable(R.drawable.question_mark));
         initFullscreenDialog();

@@ -40,4 +40,5 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 
+
 </manifest>

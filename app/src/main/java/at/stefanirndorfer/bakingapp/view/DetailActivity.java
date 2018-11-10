@@ -87,10 +87,12 @@ public class DetailActivity extends AppCompatActivity implements StepItemUserAct
         if (mTwoPane) {
             fragmentManager.beginTransaction()
                     .replace(R.id.right_pane_container, stepFragment)
+                    .addToBackStack(stepFragment.getClass().getCanonicalName())
                     .commit();
         } else {
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_fragment_container, stepFragment)
+                    .addToBackStack(stepFragment.getClass().getCanonicalName())
                     .commit();
         }
     }
