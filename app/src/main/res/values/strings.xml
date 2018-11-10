@@ -18,4 +18,5 @@
     <string name="ingredients_text">Ingredients</string>
     <string name="steps">Steps</string>
     <string name="spoon_graphic">Spoon Graphic</string>
+    <string name="placeholder_img_for_step_thumbnail">Image of a muffin</string>
 </resources>

@@ -1,14 +1,19 @@
 package at.stefanirndorfer.bakingapp.adapter;
 
+import android.app.Application;
 import android.databinding.DataBindingUtil;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.squareup.picasso.Callback;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.data.Step;
 import at.stefanirndorfer.bakingapp.databinding.StepItemBinding;
 import at.stefanirndorfer.bakingapp.view.input.StepItemUserActionListener;
@@ -19,9 +24,11 @@ public class StepsListAdapter extends BaseAdapter {
 
     private final StepsViewModel mViewModel;
     private final StepItemUserActionListener mListener;
+    private final Application mContext;
     private List<Step> mSteps;
 
-    public StepsListAdapter(StepItemUserActionListener listener, StepsViewModel mViewModel) {
+    public StepsListAdapter(Application context, StepItemUserActionListener listener, StepsViewModel mViewModel) {
+        this.mContext = context;
         this.mListener = listener;
         this.mViewModel = mViewModel;
         mSteps = new ArrayList<>();
@@ -76,6 +83,35 @@ public class StepsListAdapter extends BaseAdapter {
         binding.setStep(mSteps.get(position));
 
         binding.stepShortDescriptionTv.setText(mSteps.get(position).getDescription());
+
+        //fetch image resource if existing
+        String imageUrl = mSteps.get(position).getThumbnailURL();
+        if (!TextUtils.isEmpty(imageUrl)) {
+            mViewModel.loadImageIntoView(binding.stepImageIv, imageUrl,
+                    new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            Timber.d("success loading image for step: " + mSteps.get(position).getShortDescription());
+                            binding.stepImagePb.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError() {
+                            Timber.e("Error loading image for step: " + mSteps.get(position).getShortDescription());
+                            binding.stepImageIv.setImageDrawable(mContext.getResources().getDrawable(R.drawable.toertchen));
+                            binding.stepImageIv.setVisibility(View.VISIBLE);
+                            binding.stepImagePb.setVisibility(View.GONE);
+                        }
+                    }
+            );
+            binding.stepImageIv.setVisibility(View.GONE);
+            binding.stepImagePb.setVisibility(View.VISIBLE);
+        } else {
+            binding.stepImageIv.setVisibility(View.VISIBLE);
+            binding.stepImagePb.setVisibility(View.GONE);
+        }
+
+
         binding.setListener(userActionListener);
         binding.executePendingBindings();
 

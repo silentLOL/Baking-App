@@ -60,5 +60,5 @@ public interface RecipesDataSource {
     // Media requests
     //--------------------------------
 
-    void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback);
+    void loadImageIntoView(Context context, ImageView target, String imageUrl, Callback callback);
 }

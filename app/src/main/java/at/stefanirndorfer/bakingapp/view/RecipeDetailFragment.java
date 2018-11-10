@@ -78,7 +78,7 @@ public class RecipeDetailFragment extends Fragment {
 
         // Create the adapter
         // This adapter takes in the context and a reference of the viewModel
-        StepsListAdapter adapter = new StepsListAdapter(mListener, mViewModel);
+        StepsListAdapter adapter = new StepsListAdapter(getActivity().getApplication(), mListener, mViewModel);
 
         // Set the adapter on the ListView
         listView.setAdapter(adapter);

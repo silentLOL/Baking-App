@@ -100,7 +100,7 @@ public class FakeRecipesRemoteDataSource implements RecipesDataSource {
     }
 
     @Override
-    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback) {
+    public void loadImageIntoView(Context context, ImageView target, String imageUrl, Callback callback) {
 
     }
 }

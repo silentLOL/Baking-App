@@ -6,6 +6,9 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Callback;
 
 import java.util.List;
 
@@ -55,4 +58,7 @@ public class StepsViewModel extends AndroidViewModel {
         return mSteps;
     }
 
+    public void loadImageIntoView(ImageView imageView, String imageUrl, Callback callback) {
+        mRecipeRepository.loadImageIntoView(mContext, imageView, imageUrl, callback);
+    }
 }

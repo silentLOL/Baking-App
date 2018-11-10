@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.databinding.ObservableList;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import at.stefanirndorfer.bakingapp.data.Recipe;
 import at.stefanirndorfer.bakingapp.data.source.RecipesRepository;
-import at.stefanirndorfer.bakingapp.view.DetailActivity;
 import timber.log.Timber;
 
 public class MainViewModel extends AndroidViewModel {
@@ -58,7 +56,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void loadRecipeImage(ImageView target, String imageUrl, Callback callback) {
-        mRecipeRepository.loadImageForRecipe(mContext, target, imageUrl, callback);
+        mRecipeRepository.loadImageIntoView(mContext, target, imageUrl, callback);
     }
 
     public MutableLiveData<List<Recipe>> getRecipesLiveData() {

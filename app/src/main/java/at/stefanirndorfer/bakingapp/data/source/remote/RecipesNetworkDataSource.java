@@ -134,7 +134,7 @@ public class RecipesNetworkDataSource implements RecipesDataSource {
      * @param imageUrl
      * @param callback
      */
-    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, com.squareup.picasso.Callback callback) {
+    public void loadImageIntoView(Context context, ImageView target, String imageUrl, com.squareup.picasso.Callback callback) {
         Picasso.with(context)
                 .load(imageUrl)
                 .into(target, callback);

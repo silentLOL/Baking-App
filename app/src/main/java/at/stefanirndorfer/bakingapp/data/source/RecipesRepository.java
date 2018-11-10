@@ -397,8 +397,8 @@ public class RecipesRepository implements RecipesDataSource {
     }
 
     @Override
-    public void loadImageForRecipe(Context context, ImageView target, String imageUrl, Callback callback) {
-        mRecipesRemoteDataSource.loadImageForRecipe(context, target, imageUrl, callback);
+    public void loadImageIntoView(Context context, ImageView target, String imageUrl, Callback callback) {
+        mRecipesRemoteDataSource.loadImageIntoView(context, target, imageUrl, callback);
     }
 
 }
