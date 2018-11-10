@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,31 +15,44 @@ import android.widget.GridView;
 
 import at.stefanirndorfer.bakingapp.R;
 import at.stefanirndorfer.bakingapp.adapter.MainRecipesListAdapter;
+import at.stefanirndorfer.bakingapp.adapter.MainRecipesRecyclerViewAdapter;
+import at.stefanirndorfer.bakingapp.adapter.StepsRecyclerViewAdapter;
+import at.stefanirndorfer.bakingapp.databinding.FragmentMainGridBinding;
 import at.stefanirndorfer.bakingapp.view.input.RecipeItemUserActionListener;
 import at.stefanirndorfer.bakingapp.viewmodel.MainViewModel;
+import timber.log.Timber;
 
 public class MainGridFragment extends Fragment {
+    FragmentMainGridBinding mFragmentBinding;
     private MainViewModel mViewModel;
     private RecipeItemUserActionListener mListener;
+    private MainRecipesRecyclerViewAdapter mRecipeRecyclerViewAdapter;
+    private RecyclerView mRecyclerViewRecipes;
+    private GridLayoutManager mGridLayoutManagerRecipes;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_main_grid, container, false);
-
+        mFragmentBinding = FragmentMainGridBinding.inflate(inflater, container, false);
         mViewModel = MainActivity.obtainViewModel(getActivity());
+        mFragmentBinding.setViewModel(mViewModel);
+        return mFragmentBinding.getRoot();
+    }
 
-        // Get a reference to the GridView in the fragment_main_list xml layout file
-        GridView gridView = (GridView) rootView.findViewById(R.id.recipes_grid_view);
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setUpRecipesRecyclerViewAdapter();
+    }
 
-        // Create the adapter
-        // This adapter takes in the context and an ArrayList of ALL the image resources to display
-        MainRecipesListAdapter adapter = new MainRecipesListAdapter(mListener, mViewModel);
-
-        // Set the adapter on the GridView
-        gridView.setAdapter(adapter);
-
-        return rootView;
+    private void setUpRecipesRecyclerViewAdapter() {
+        Timber.d( "Setting up RecyclerView");
+        mRecyclerViewRecipes = mFragmentBinding.recyclerViewRecipesGridRv;
+        mGridLayoutManagerRecipes = new GridLayoutManager(this.getActivity(), 2);
+        mRecyclerViewRecipes.setLayoutManager(mGridLayoutManagerRecipes);
+        mRecyclerViewRecipes.setHasFixedSize(true);
+        mRecipeRecyclerViewAdapter = new MainRecipesRecyclerViewAdapter(mListener, mViewModel);
+        mRecyclerViewRecipes.setAdapter(mRecipeRecyclerViewAdapter);
     }
 
     @Override

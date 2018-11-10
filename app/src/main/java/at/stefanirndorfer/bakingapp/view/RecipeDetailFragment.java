@@ -64,7 +64,7 @@ public class RecipeDetailFragment extends Fragment {
     }
 
     private void setupStepRecyclerViewAdapter() {
-        Timber.d( "Setting up TrailerRecyclerView");
+        Timber.d( "Setting up RecyclerView");
         mRecyclerViewSteps = mFragmentBinding.recyclerViewStepsRv;
         mLinearLayoutManagerSteps = new LinearLayoutManager(this.getActivity());
         mRecyclerViewSteps.setLayoutManager(mLinearLayoutManagerSteps);

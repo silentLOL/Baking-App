@@ -12,19 +12,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/recipes_grid_view"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_recipes_grid_rv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="7"
             android:adjustViewBounds="true"
-            android:columnWidth="180dp"
             android:gravity="center"
             android:horizontalSpacing="8dp"
-            android:numColumns="2"
-            android:padding="16dp"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8dp" />
+            android:padding="16dp" />
+
     </LinearLayout>
 
 </layout>
